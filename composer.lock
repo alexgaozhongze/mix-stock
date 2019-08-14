@@ -1,0 +1,2652 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "464115f50145b3daa206d6314e57945b",
+    "packages": [
+        {
+            "name": "cache/adapter-common",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/adapter-common.git",
+                "reference": "6320bb5f5574cb88438059b59f8708da6b6f1d32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/adapter-common/zipball/6320bb5f5574cb88438059b59f8708da6b6f1d32",
+                "reference": "6320bb5f5574cb88438059b59f8708da6b6f1d32",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "cache/tag-interop": "^1.0",
+                "php": "^5.6 || ^7.0",
+                "psr/cache": "^1.0",
+                "psr/log": "^1.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "^0.16",
+                "phpunit/phpunit": "^5.7.21"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cache\\Adapter\\Common\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                }
+            ],
+            "description": "Common classes for PSR-6 adapters",
+            "homepage": "http://www.php-cache.com/en/latest/",
+            "keywords": [
+                "cache",
+                "psr-6",
+                "tag"
+            ],
+            "time": "2018-07-08T13:04:33+00:00"
+        },
+        {
+            "name": "cache/filesystem-adapter",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/filesystem-adapter.git",
+                "reference": "d50680b6dabbe39f9831f5fc9efa61c09d936017"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/filesystem-adapter/zipball/d50680b6dabbe39f9831f5fc9efa61c09d936017",
+                "reference": "d50680b6dabbe39f9831f5fc9efa61c09d936017",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "cache/adapter-common": "^1.0",
+                "league/flysystem": "^1.0",
+                "php": "^5.6 || ^7.0",
+                "psr/cache": "^1.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "provide": {
+                "psr/cache-implementation": "^1.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "^0.16",
+                "phpunit/phpunit": "^5.7.21"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cache\\Adapter\\Filesystem\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                }
+            ],
+            "description": "A PSR-6 cache implementation using filesystem. This implementation supports tags",
+            "homepage": "http://www.php-cache.com/en/latest/",
+            "keywords": [
+                "cache",
+                "filesystem",
+                "psr-6",
+                "tag"
+            ],
+            "time": "2017-07-16T21:09:25+00:00"
+        },
+        {
+            "name": "cache/tag-interop",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/tag-interop.git",
+                "reference": "c7496dd81530f538af27b4f2713cde97bc292832"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/tag-interop/zipball/c7496dd81530f538af27b4f2713cde97bc292832",
+                "reference": "c7496dd81530f538af27b4f2713cde97bc292832",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^5.5 || ^7.0",
+                "psr/cache": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cache\\TagInterop\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com",
+                    "homepage": "https://github.com/nicolas-grekas"
+                }
+            ],
+            "description": "Framework interoperable interfaces for tags",
+            "homepage": "http://www.php-cache.com/en/latest/",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr6",
+                "tag"
+            ],
+            "time": "2017-03-13T09:14:27+00:00"
+        },
+        {
+            "name": "firebase/php-jwt",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": " 4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "role": "Developer",
+                    "email": "neuman+pear@twilio.com"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "role": "Developer",
+                    "email": "anant@php.net"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "time": "2017-06-27T22:17:23+00:00"
+        },
+        {
+            "name": "guzzlehttp/guzzle",
+            "version": "6.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/407b0cb880ace85c9b63c5f9551db498cb2d50ba",
+                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.4",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
+                "psr/log": "^1.0"
+            },
+            "suggest": {
+                "psr/log": "Required for using the Log middleware"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "6.3-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "time": "2018-04-22T15:46:56+00:00"
+        },
+        {
+            "name": "guzzlehttp/promises",
+            "version": "v1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/promises.git",
+                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle promises library",
+            "keywords": [
+                "promise"
+            ],
+            "time": "2016-12-20T10:07:11+00:00"
+        },
+        {
+            "name": "guzzlehttp/psr7",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/psr7.git",
+                "reference": "239400de7a173fe9901b9ac7c06497751f00727a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/239400de7a173fe9901b9ac7c06497751f00727a",
+                "reference": "239400de7a173fe9901b9ac7c06497751f00727a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "psr/http-message": "~1.0",
+                "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
+            },
+            "provide": {
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "ext-zlib": "*",
+                "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.8"
+            },
+            "suggest": {
+                "zendframework/zend-httphandlerrunner": "Emit PSR-7 responses"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Psr7\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "homepage": "https://github.com/Tobion"
+                }
+            ],
+            "description": "PSR-7 message implementation that also provides common utility methods",
+            "keywords": [
+                "http",
+                "message",
+                "psr-7",
+                "request",
+                "response",
+                "stream",
+                "uri",
+                "url"
+            ],
+            "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "jaeger/g-http",
+            "version": "V1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/GHttp.git",
+                "reference": "eb34d266a07c687aef45087370ef47d48321bd2e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/GHttp/zipball/eb34d266a07c687aef45087370ef47d48321bd2e",
+                "reference": "eb34d266a07c687aef45087370ef47d48321bd2e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "cache/filesystem-adapter": "^1.0",
+                "guzzlehttp/guzzle": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jaeger\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "JaegerCode@gmail.com"
+                }
+            ],
+            "description": "Simple Http client base on GuzzleHttp",
+            "time": "2018-12-12T04:21:15+00:00"
+        },
+        {
+            "name": "jaeger/phpquery-single",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/phpQuery-single.git",
+                "reference": "2d607a2bcfd8bcf5c42e83d6c66fedaf397c7c3f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/phpQuery-single/zipball/2d607a2bcfd8bcf5c42e83d6c66fedaf397c7c3f",
+                "reference": "2d607a2bcfd8bcf5c42e83d6c66fedaf397c7c3f",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "phpQuery.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobiasz Cudnik",
+                    "role": "Developer",
+                    "email": "tobiasz.cudnik@gmail.com",
+                    "homepage": "https://github.com/TobiaszCudnik"
+                },
+                {
+                    "name": "Jaeger",
+                    "role": "Packager"
+                }
+            ],
+            "description": "phpQuery单文件版本，是Querylist的依赖(http://querylist.cc/)，phpQuery项目主页:http://code.google.com/p/phpquery/",
+            "homepage": "http://code.google.com/p/phpquery/",
+            "time": "2019-02-22T07:27:45+00:00"
+        },
+        {
+            "name": "jaeger/querylist",
+            "version": "V4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/QueryList.git",
+                "reference": "46f564bc8b1a22b5dca7cd690b4af76e919b39f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/QueryList/zipball/46f564bc8b1a22b5dca7cd690b4af76e919b39f7",
+                "reference": "46f564bc8b1a22b5dca7cd690b4af76e919b39f7",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "jaeger/g-http": "^1.1",
+                "jaeger/phpquery-single": "^1",
+                "php": ">=7.0",
+                "tightenco/collect": "^5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5",
+                "symfony/var-dumper": "^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "JaegerCode@gmail.com"
+                }
+            ],
+            "description": "Simple, elegant, extensible PHP Web Scraper (crawler/spider),Use the css3 dom selector,Based on phpQuery! 简洁、优雅、可扩展的PHP采集工具(爬虫)，基于phpQuery。",
+            "homepage": "http://querylist.cc",
+            "keywords": [
+                "QueryList",
+                "phpQuery",
+                "spider"
+            ],
+            "time": "2019-02-22T07:33:54+00:00"
+        },
+        {
+            "name": "league/flysystem",
+            "version": "1.0.53",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem.git",
+                "reference": "08e12b7628f035600634a5e76d95b5eb66cea674"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/08e12b7628f035600634a5e76d95b5eb66cea674",
+                "reference": "08e12b7628f035600634a5e76d95b5eb66cea674",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "php": ">=5.5.9"
+            },
+            "conflict": {
+                "league/flysystem-sftp": "<1.0.6"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "^3.4",
+                "phpunit/phpunit": "^5.7.10"
+            },
+            "suggest": {
+                "ext-fileinfo": "Required for MimeType",
+                "ext-ftp": "Allows you to use FTP server storage",
+                "ext-openssl": "Allows you to use FTPS server storage",
+                "league/flysystem-aws-s3-v2": "Allows you to use S3 storage with AWS SDK v2",
+                "league/flysystem-aws-s3-v3": "Allows you to use S3 storage with AWS SDK v3",
+                "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
+                "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
+                "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
+                "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
+                "league/flysystem-sftp": "Allows you to use SFTP server storage via phpseclib",
+                "league/flysystem-webdav": "Allows you to use WebDAV storage",
+                "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter",
+                "spatie/flysystem-dropbox": "Allows you to use Dropbox storage",
+                "srmklive/flysystem-dropbox-v2": "Allows you to use Dropbox storage for PHP 5 applications"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "Filesystem abstraction: Many filesystems, one API.",
+            "keywords": [
+                "Cloud Files",
+                "WebDAV",
+                "abstraction",
+                "aws",
+                "cloud",
+                "copy.com",
+                "dropbox",
+                "file systems",
+                "files",
+                "filesystem",
+                "filesystems",
+                "ftp",
+                "rackspace",
+                "remote",
+                "s3",
+                "sftp",
+                "storage"
+            ],
+            "time": "2019-06-18T20:09:29+00:00"
+        },
+        {
+            "name": "mix/auth",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/auth.git",
+                "reference": "94736808d592e1fcec081e97406df23de0672cba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/auth/zipball/94736808d592e1fcec081e97406df23de0672cba",
+                "reference": "94736808d592e1fcec081e97406df23de0672cba",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "firebase/php-jwt": "^5.0",
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Auth\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-13T06:40:43+00:00"
+        },
+        {
+            "name": "mix/cache",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-cache.git",
+                "reference": "587f922efe0728dedbbe3ea5e4d99f5f9c62b485"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-cache/zipball/587f922efe0728dedbbe3ea5e4d99f5f9c62b485",
+                "reference": "587f922efe0728dedbbe3ea5e4d99f5f9c62b485",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0",
+                "psr/simple-cache": "~1.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-10T02:03:14+00:00"
+        },
+        {
+            "name": "mix/concurrent",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-concurrent.git",
+                "reference": "d52dbb77558f45e8156bdf72f5d3af2c3695dd09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-concurrent/zipball/d52dbb77558f45e8156bdf72f5d3af2c3695dd09",
+                "reference": "d52dbb77558f45e8156bdf72f5d3af2c3695dd09",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Concurrent\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-09T02:50:30+00:00"
+        },
+        {
+            "name": "mix/console",
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/console.git",
+                "reference": "53b9fc153c37b5d8e358f37efcc32b0e6f4e2c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/console/zipball/53b9fc153c37b5d8e358f37efcc32b0e6f4e2c6f",
+                "reference": "53b9fc153c37b5d8e358f37efcc32b0e6f4e2c6f",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Console\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-18T06:55:24+00:00"
+        },
+        {
+            "name": "mix/database",
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/database.git",
+                "reference": "423e05e8e55bada073a2b7ba85e0fab2d4549919"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/database/zipball/423e05e8e55bada073a2b7ba85e0fab2d4549919",
+                "reference": "423e05e8e55bada073a2b7ba85e0fab2d4549919",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/pool": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Database\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-26T10:17:25+00:00"
+        },
+        {
+            "name": "mix/framework",
+            "version": "v2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/framework.git",
+                "reference": "ee7be89c005904d5db41d89ec7ce1cb4f493571a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/framework/zipball/ee7be89c005904d5db41d89ec7ce1cb4f493571a",
+                "reference": "ee7be89c005904d5db41d89ec7ce1cb4f493571a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/container": "~1.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\": "src/"
+                },
+                "classmap": [
+                    "src/Mix.php"
+                ],
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架核心 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-18T08:11:57+00:00"
+        },
+        {
+            "name": "mix/http",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http.git",
+                "reference": "d2cb2386682ae2d62938afb5ad147a9deeb7e625"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http/zipball/d2cb2386682ae2d62938afb5ad147a9deeb7e625",
+                "reference": "d2cb2386682ae2d62938afb5ad147a9deeb7e625",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-14T11:14:50+00:00"
+        },
+        {
+            "name": "mix/http-daemon",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http-daemon.git",
+                "reference": "4fd216c0e9a25f0ed720e662cd5fe1f7f8e8c725"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http-daemon/zipball/4fd216c0e9a25f0ed720e662cd5fe1f7f8e8c725",
+                "reference": "4fd216c0e9a25f0ed720e662cd5fe1f7f8e8c725",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "~2.0.0",
+                "mix/framework": "~2.0.0",
+                "mix/http-server": "~2.0.0",
+                "mix/log": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP HTTP 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:39:28+00:00"
+        },
+        {
+            "name": "mix/http-message",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-http-message.git",
+                "reference": "79ae3f232a36e2717db55c6acfe7d740c580b2fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-http-message/zipball/79ae3f232a36e2717db55c6acfe7d740c580b2fa",
+                "reference": "79ae3f232a36e2717db55c6acfe7d740c580b2fa",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-27T08:33:06+00:00"
+        },
+        {
+            "name": "mix/http-server",
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/http-server.git",
+                "reference": "e86e651f19853909101d76e5531027519fc46224"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/http-server/zipball/e86e651f19853909101d76e5531027519fc46224",
+                "reference": "e86e651f19853909101d76e5531027519fc46224",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/server": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:39:34+00:00"
+        },
+        {
+            "name": "mix/http-session",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-http-session.git",
+                "reference": "a5d071089031d7a69c11e4d1a229c240945f077d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-http-session/zipball/a5d071089031d7a69c11e4d1a229c240945f077d",
+                "reference": "a5d071089031d7a69c11e4d1a229c240945f077d",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Http\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-09T02:51:02+00:00"
+        },
+        {
+            "name": "mix/log",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/log.git",
+                "reference": "66ae2b3c3a625d1f6c1d0cbf4185796b9ed7c1f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/log/zipball/66ae2b3c3a625d1f6c1d0cbf4185796b9ed7c1f7",
+                "reference": "66ae2b3c3a625d1f6c1d0cbf4185796b9ed7c1f7",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0",
+                "psr/log": "~1.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Log\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-18T08:15:39+00:00"
+        },
+        {
+            "name": "mix/pool",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-pool.git",
+                "reference": "5bc7070e9b8e1d5538c97c352af1d581d52ea11a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-pool/zipball/5bc7070e9b8e1d5538c97c352af1d581d52ea11a",
+                "reference": "5bc7070e9b8e1d5538c97c352af1d581d52ea11a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Pool\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-09T03:37:38+00:00"
+        },
+        {
+            "name": "mix/redis",
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/redis.git",
+                "reference": "ff051e5f96a2789100964f306ac5c41d5bd9e86c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/redis/zipball/ff051e5f96a2789100964f306ac5c41d5bd9e86c",
+                "reference": "ff051e5f96a2789100964f306ac5c41d5bd9e86c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/pool": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Redis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-26T10:17:53+00:00"
+        },
+        {
+            "name": "mix/server",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/server.git",
+                "reference": "7621c977fdf71cf0702c8e8867c1be90acd65e56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/server/zipball/7621c977fdf71cf0702c8e8867c1be90acd65e56",
+                "reference": "7621c977fdf71cf0702c8e8867c1be90acd65e56",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Server 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-12T11:49:53+00:00"
+        },
+        {
+            "name": "mix/tcp",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp.git",
+                "reference": "354a55792e72d4aee93e16df58d935dab85741cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp/zipball/354a55792e72d4aee93e16df58d935dab85741cc",
+                "reference": "354a55792e72d4aee93e16df58d935dab85741cc",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T11:53:58+00:00"
+        },
+        {
+            "name": "mix/tcp-daemon",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp-daemon.git",
+                "reference": "8d30c7026690642087485b14844db5a022cdc878"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp-daemon/zipball/8d30c7026690642087485b14844db5a022cdc878",
+                "reference": "8d30c7026690642087485b14844db5a022cdc878",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "~2.0.0",
+                "mix/framework": "~2.0.0",
+                "mix/log": "~2.0.0",
+                "mix/tcp-server": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Tcp 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:48:04+00:00"
+        },
+        {
+            "name": "mix/tcp-server",
+            "version": "v2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/tcp-server.git",
+                "reference": "b8893828d68445cd28cdf53479fdeb2fd469b748"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/tcp-server/zipball/b8893828d68445cd28cdf53479fdeb2fd469b748",
+                "reference": "b8893828d68445cd28cdf53479fdeb2fd469b748",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/server": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:48:16+00:00"
+        },
+        {
+            "name": "mix/tcp-session",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-tcp-session.git",
+                "reference": "aca88d6d060f9209428303e0f0555a612fb2ea44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-tcp-session/zipball/aca88d6d060f9209428303e0f0555a612fb2ea44",
+                "reference": "aca88d6d060f9209428303e0f0555a612fb2ea44",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Tcp\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-09T02:51:32+00:00"
+        },
+        {
+            "name": "mix/udp",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/udp.git",
+                "reference": "e27711e67849736e0073f11f1c512e85829ba38c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/udp/zipball/e27711e67849736e0073f11f1c512e85829ba38c",
+                "reference": "e27711e67849736e0073f11f1c512e85829ba38c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Udp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T11:54:17+00:00"
+        },
+        {
+            "name": "mix/udp-daemon",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/udp-daemon.git",
+                "reference": "fe4a84a8c35de7d5bc604642468a4cbf3ff785f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/udp-daemon/zipball/fe4a84a8c35de7d5bc604642468a4cbf3ff785f7",
+                "reference": "fe4a84a8c35de7d5bc604642468a4cbf3ff785f7",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "~2.0.0",
+                "mix/framework": "~2.0.0",
+                "mix/log": "~2.0.0",
+                "mix/udp-server": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Udp\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP Tcp 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:50:36+00:00"
+        },
+        {
+            "name": "mix/udp-server",
+            "version": "v2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/udp-server.git",
+                "reference": "bea0588d28c7d82bbeccfa737cb551920d639090"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/udp-server/zipball/bea0588d28c7d82bbeccfa737cb551920d639090",
+                "reference": "bea0588d28c7d82bbeccfa737cb551920d639090",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/server": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Udp\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:50:41+00:00"
+        },
+        {
+            "name": "mix/validate",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/mix-validate.git",
+                "reference": "a0a80a7a70b540105f2856fe241da1a40480c401"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/mix-validate/zipball/a0a80a7a70b540105f2856fe241da1a40480c401",
+                "reference": "a0a80a7a70b540105f2856fe241da1a40480c401",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\Validate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-17T02:43:06+00:00"
+        },
+        {
+            "name": "mix/websocket",
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/websocket.git",
+                "reference": "c895aa732a8b08d405a5ffb250eeac3af7e33efc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/websocket/zipball/c895aa732a8b08d405a5ffb250eeac3af7e33efc",
+                "reference": "c895aa732a8b08d405a5ffb250eeac3af7e33efc",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/http-message": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\WebSocket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-06-04T09:03:06+00:00"
+        },
+        {
+            "name": "mix/websocket-daemon",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/websocket-daemon.git",
+                "reference": "12bf0fe093def8be7116dff8a718521f16519955"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/websocket-daemon/zipball/12bf0fe093def8be7116dff8a718521f16519955",
+                "reference": "12bf0fe093def8be7116dff8a718521f16519955",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/console": "~2.0.0",
+                "mix/framework": "~2.0.0",
+                "mix/log": "~2.0.0",
+                "mix/websocket-server": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\WebSocket\\Daemon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP WebSocket 守护程序 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:39:41+00:00"
+        },
+        {
+            "name": "mix/websocket-server",
+            "version": "v2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mix-php/websocket-server.git",
+                "reference": "f07f925e12efd0eea75385eb5712ad6084909f27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mix-php/websocket-server/zipball/f07f925e12efd0eea75385eb5712ad6084909f27",
+                "reference": "f07f925e12efd0eea75385eb5712ad6084909f27",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "mix/framework": "~2.0.0",
+                "mix/server": "~2.0.0",
+                "mix/websocket": "~2.0.0",
+                "php": ">=7.0.0"
+            },
+            "type": "framework",
+            "autoload": {
+                "psr-4": {
+                    "Mix\\WebSocket\\Server\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "liu,jian",
+                    "email": "coder.keda@gmail.com"
+                }
+            ],
+            "description": "MixPHP 框架模块 http://www.mixphp.cn",
+            "homepage": "http://www.mixphp.cn/",
+            "keywords": [
+                "framework",
+                "mixphp",
+                "swoole"
+            ],
+            "time": "2019-05-31T07:39:57+00:00"
+        },
+        {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "time": "2016-08-06T20:24:11+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2018-11-20T15:27:04+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "ralouphie/getallheaders",
+            "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ralouphie/getallheaders.git",
+                "reference": "120b605dfeb996808c31b6477290a714d356e822"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/120b605dfeb996808c31b6477290a714d356e822",
+                "reference": "120b605dfeb996808c31b6477290a714d356e822",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^5 || ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/getallheaders.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ralph Khattar",
+                    "email": "ralph.khattar@gmail.com"
+                }
+            ],
+            "description": "A polyfill for getallheaders.",
+            "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.11-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2019-02-06T07:57:58+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php72",
+            "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php72.git",
+                "reference": "ab50dcf166d5f577978419edd37aa2bb8eabce0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/ab50dcf166d5f577978419edd37aa2bb8eabce0c",
+                "reference": "ab50dcf166d5f577978419edd37aa2bb8eabce0c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.11-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php72\\": ""
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 7.2+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "time": "2019-02-06T07:57:58+00:00"
+        },
+        {
+            "name": "symfony/var-dumper",
+            "version": "v4.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-dumper.git",
+                "reference": "e4110b992d2cbe198d7d3b244d079c1c58761d07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e4110b992d2cbe198d7d3b244d079c1c58761d07",
+                "reference": "e4110b992d2cbe198d7d3b244d079c1c58761d07",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/polyfill-php72": "~1.5"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
+                "symfony/console": "<3.4"
+            },
+            "require-dev": {
+                "ext-iconv": "*",
+                "symfony/console": "~3.4|~4.0",
+                "symfony/process": "~3.4|~4.0",
+                "twig/twig": "~1.34|~2.4"
+            },
+            "suggest": {
+                "ext-iconv": "To convert non-UTF-8 strings to UTF-8 (or symfony/polyfill-iconv in case ext-iconv cannot be used).",
+                "ext-intl": "To show region name in time zone dump",
+                "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
+            },
+            "bin": [
+                "Resources/bin/var-dump-server"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.3-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "Resources/functions/dump.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\VarDumper\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony mechanism for exploring and dumping PHP variables",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "debug",
+                "dump"
+            ],
+            "time": "2019-07-27T06:42:46+00:00"
+        },
+        {
+            "name": "tightenco/collect",
+            "version": "v5.8.30",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tightenco/collect.git",
+                "reference": "957e430c26c51b65c80acc87896023229dc05a21"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tightenco/collect/zipball/957e430c26c51b65c80acc87896023229dc05a21",
+                "reference": "957e430c26c51b65c80acc87896023229dc05a21",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/var-dumper": ">=3.4 <5"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "nesbot/carbon": "^1.26.3",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Collect/Support/helpers.php",
+                    "src/Collect/Support/alias.php"
+                ],
+                "psr-4": {
+                    "Tightenco\\Collect\\": "src/Collect"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "Collect - Illuminate Collections as a separate package.",
+            "keywords": [
+                "collection",
+                "laravel"
+            ],
+            "time": "2019-07-30T19:16:47+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "swoole/ide-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swoole/ide-helper.git",
+                "reference": "d8fcff025cd386635f74fe68fb669be4c5b4a0d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/d8fcff025cd386635f74fe68fb669be4c5b4a0d4",
+                "reference": "d8fcff025cd386635f74fe68fb669be4c5b4a0d4",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "~3.4.0",
+                "zendframework/zend-code": "~3.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swoole\\IDEHelper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Team Swoole",
+                    "email": "team@swoole.com"
+                }
+            ],
+            "description": "IDE help files for Swoole.",
+            "time": "2019-07-07T19:43:22+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "swoole/ide-helper": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.0.0",
+        "ext-pdo": "*",
+        "ext-redis": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "platform-dev": []
+}
