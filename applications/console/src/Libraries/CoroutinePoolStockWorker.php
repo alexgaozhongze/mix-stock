@@ -66,9 +66,15 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
 
         $connection=app()->dbPool->getConnection();
         $fscj_table_name = "fscj_" . date('Ymd');
-        $sql = "SELECT `code`, COUNT(1) AS count FROM `$fscj_table_name` GROUP BY `code`";
+        $sql = "SELECT `code`, `type`, COUNT(1) AS count FROM `$fscj_table_name` GROUP BY `code`";
         $list = $connection->createCommand($sql)->queryAll();
-        self::$code_times = $list ? array_column($list, 'count', 'code') : [];
+
+        $code_times = [];
+        array_walk($list, function($item) use (&$code_times) {
+            $code = str_pad($item['code'], 6, "0", STR_PAD_LEFT);
+            $code_times[$code . $item['type']] = $item['count'];
+        });
+        self::$code_times = $code_times;
 
         self::syncZjlx($urls);
     }
@@ -91,7 +97,7 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
                 $sql_fields = "INSERT INTO `zjlx` (`code`, `price`, `up`, `mar`, `mai`, `sur`, `sui`, `bir`, `bii`, `mir`, `mii`, `smr`, `smi`, `date`, `name`, `type`) VALUES ";
                 $sql_values = "";
 
-                array_walk($datas, function($item) use(&$sql_values) {
+                array_walk($datas, function($item) use (&$sql_values) {
                     $item = str_replace('-,', 'NULL,', $item);
                     $sql_values && $sql_values .= ',';
 
@@ -120,7 +126,7 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
 
         $urls = $url_keys = [];
         array_walk(self::$code_times, function($item, $key) use (&$urls, &$url_keys, $timestamp) {
-            $page_size = 100;
+            $page_size = 143;
             $page = ceil(($item + 1) / $page_size);
 
             $urls[] = "http://mdfm.eastmoney.com/EM_UBG_MinuteApi/Js/Get?dtype=all&token=44c9d251add88e27b65ed86506f6e5da&rows=$page_size&page=$page&id=$key&gtvolume=&sort=asc&_=$timestamp&js={%22data%22:(x)}";
@@ -132,7 +138,8 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
         ->withOptions([
             'timeout' => 3
         ])
-        ->success(function(QueryList $ql,Response $response, $index) use($url_keys){
+        ->success(function(QueryList $ql,Response $response, $index) use($url_keys, $urls){
+            echo $urls[$index], PHP_EOL;
             $json_data = $ql->getHtml();
             if ($json_data) {
                 $connection=app()->dbPool->getConnection();
