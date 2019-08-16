@@ -57,7 +57,7 @@ class StockCommand
             while(!$this->quit) {
                 $jobQueue->push('goBeyond');
                 usleep(888888);
-                if (time() >= strtotime('15:00')) {
+                if (time() >= strtotime('18:00')) {
                     $dispatch->stop();
                     $this->quit = true;
                 }

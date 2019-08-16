@@ -64,6 +64,12 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
             $urls[] = "http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=$i&ps=50&js={%22pages%22:(pc),%22data%22:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=$timestamp";
         }
 
+        $connection=app()->dbPool->getConnection();
+        $fscj_table_name = "fscj_" . date('Ymd');
+        $sql = "SELECT `code`, COUNT(1) AS count FROM `$fscj_table_name` GROUP BY `code`";
+        $list = $connection->createCommand($sql)->queryAll();
+        self::$code_times = $list ? array_column($list, 'count', 'code') : [];
+
         self::syncZjlx($urls);
     }
 
@@ -132,8 +138,6 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
                 $connection=app()->dbPool->getConnection();
                 $table_name = "fscj_" . date('Ymd');
 
-                echo $json_data;
-
                 $data = json_decode($json_data, true);
                 $datas = $data['data']['value']['data'] ?? [];
                 $pc = $data['data']['value']['pc'] ?? 0;
@@ -153,7 +157,6 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
                 });
 
                 if ($sql_values) {
-                    self::$code_times[$url_keys[$index]] += $count;
                     $sql = $sql_fields . $sql_values;
                     $connection->createCommand($sql)->execute();
                 }
