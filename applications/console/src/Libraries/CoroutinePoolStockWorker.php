@@ -139,7 +139,6 @@ class CoroutinePoolStockWorker extends AbstractWorker implements WorkerInterface
             'timeout' => 3
         ])
         ->success(function(QueryList $ql,Response $response, $index) use($url_keys, $urls){
-            echo $urls[$index], PHP_EOL;
             $json_data = $ql->getHtml();
             if ($json_data) {
                 $connection=app()->dbPool->getConnection();
