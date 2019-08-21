@@ -21,9 +21,9 @@ return [
     // 命令
     'commands'         => [
 
-        'skd' => [
-            'CoroutinePoolStockDaemon',
-            'description' => "\tCoroutinePoolStockDaemon handle.",
+        'd' => [
+            'CoroutinePoolDaemon',
+            'description' => "\tCoroutinePoolDaemon handle.",
             'options'     => [
                 [['hde', 'handle'], 'description' => 'handle'],
                 ['say', 'description' => "\tSay ..."],

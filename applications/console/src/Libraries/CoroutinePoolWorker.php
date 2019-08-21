@@ -2,16 +2,15 @@
 
 namespace Console\Libraries;
 
-use QL\QueryList;
 use Mix\Concurrent\CoroutinePool\AbstractWorker;
 use Mix\Concurrent\CoroutinePool\WorkerInterface;
 
 /**
- * Class CoroutinePoolStockWorker
- * @package Daemon\Libraries
+ * Class CoroutinePoolWorker
+ * @package Console\Libraries
  * @author alex <alexgaozhongze@gmail.com>
  */
-class CoroutinePoolStockNewWorker extends AbstractWorker implements WorkerInterface
+class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
 {
     public static $code_times = [];
     public static $fscj_pagesize = 143;
@@ -48,10 +47,10 @@ class CoroutinePoolStockNewWorker extends AbstractWorker implements WorkerInterf
     public function handle($data)
     {
         switch ($data['type']) {
-            case 1: //zjlx
+            case 1:
                 self::zjlx($data['data']);
                 break;
-            case 2: //fscj
+            case 2:
                 self::fscj($data['data'], $data['url_keys']);
                 break;
         }
@@ -162,6 +161,11 @@ class CoroutinePoolStockNewWorker extends AbstractWorker implements WorkerInterf
         ];
         usleep(888888);
         $redis->lpush('queryList', serialize($queue_list));
+    }
+
+    private function pkyd($data)
+    {
+        //http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=20&cb=jQuery112405073457124165865_1566269514505&_=1566269524600
     }
 
 }
