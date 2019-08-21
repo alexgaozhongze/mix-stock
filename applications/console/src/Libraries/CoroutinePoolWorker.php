@@ -179,17 +179,18 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
 
         $datas = json_decode($json_data, true);
 
-        $sql_fields = "INSERT IGNORE INTO `pkyd` (`code`, `type`, `pkyd_type`, `message`, `time`) VALUES ";
+        $sql_fields = "INSERT IGNORE INTO `pkyd` (`code`, `type`, `pkyd_type`, `message`, `time`, `date`) VALUES ";
         $sql_values = "";
+        $date = date('Y-m-d');
 
-        array_walk($datas, function($item) use (&$sql_values) {
+        array_walk($datas, function($item) use (&$sql_values, $date) {
             list($codeandtype, $time, $name, $message, $nums, $type) = explode(',', $item);
             $sql_values && $sql_values .= ',';
 
             $code = substr($codeandtype, 0, 6);
             $code_type = substr($codeandtype, 6, 1);
 
-            $sql_values .= "($code, $code_type, $type, '$message,$nums', '$time')";
+            $sql_values .= "($code, $code_type, $type, '$message,$nums', '$time', '$date')";
         });
 
         if ($sql_values) {
