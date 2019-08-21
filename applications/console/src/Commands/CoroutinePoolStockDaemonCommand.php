@@ -80,7 +80,6 @@ class CoroutinePoolStockDaemonCommand
             $redis->lpush('queryList', serialize($queue_list));
         });
 
-
         // 守护处理
         $daemon = Flag::bool(['d', 'daemon'], false);
         if ($daemon) {
@@ -115,7 +114,7 @@ class CoroutinePoolStockDaemonCommand
                     $queue_list = unserialize(array_pop($data));
                     $htmls = [];
 
-echo $queue_list['type'];
+                    echo $queue_list['type'];
 
                     QueryList::multiGet($queue_list['urls'])
                     ->concurrency(8)
@@ -139,7 +138,6 @@ echo $queue_list['type'];
                     $dispatch->stop();
                     return;
                 }
-
             }
         });
         // 等待事件
