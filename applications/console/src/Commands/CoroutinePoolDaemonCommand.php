@@ -78,6 +78,17 @@ class CoroutinePoolDaemonCommand
             ];
             
             $redis->lpush('queryList', serialize($queue_list));
+
+            $urls = [
+                "http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=20&cb=&_=$timestamp"
+            ];
+
+            $queue_list = [
+                'type' => 3,
+                'urls' => $urls,
+            ];
+            
+            $redis->lpush('queryList', serialize($queue_list));
         });
 
         // 守护处理
