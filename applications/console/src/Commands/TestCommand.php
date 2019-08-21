@@ -4,9 +4,6 @@ namespace Console\Commands;
 
 use QL\QueryList;
 use Mix\Core\Event;
-use Mix\Core\Coroutine\Channel;
-use Mix\Concurrent\CoroutinePool\Dispatcher;
-use Console\Libraries\CoroutinePoolStockWorker;
 
 /**
  * Class TestCommand
@@ -27,50 +24,41 @@ class TestCommand
      */
     public function main()
     {
-        list($microstamp, $timestamp) = explode(' ', microtime());
-        $timestamp = "$timestamp" . intval($microstamp * 1000);
+        xgo(function () {
 
-        $ql = QueryList::get("http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=20&cb=&_=$timestamp");
+            $connection=app()->dbPool->getConnection();
 
-        $json_data = $ql->getHtml();
-        $data = substr_replace($json_data, '{', 0, 1);
-        $data = substr_replace($data, '}', -1, 1);
+            list($microstamp, $timestamp) = explode(' ', microtime());
+            $timestamp = "$timestamp" . intval($microstamp * 1000);
+    
+            $ql = QueryList::get("http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=20&cb=&_=$timestamp");
+    
+            $json_data = $ql->getHtml();
+            $json_data = substr_replace(substr_replace($json_data, '', 0, 1), '', -1, 1);
+    
+            $datas = json_decode($json_data, true);
+    
+            $sql_fields = "INSERT IGNORE INTO `pkyd` (`code`, `type`, `pkyd_type`, `message`, `time`) VALUES ";
+            $sql_values = "";
+    
+            array_walk($datas, function($item) use (&$sql_values) {
+                list($codeandtype, $time, $name, $message, $nums, $type) = explode(',', $item);
+                $sql_values && $sql_values .= ',';
 
-        echo $data;
+                $code = substr($codeandtype, 0, 6);
+                $code_type = substr($codeandtype, 6, 1);
+    
+                $sql_values .= "($code, $code_type, $type, '$message,$nums', '$time')";
+            });
+    
+            if ($sql_values) {
+                $sql = $sql_fields . $sql_values;
+                $connection->createCommand($sql)->execute();
+            }
 
+        });
 
-        // $data = json_decode($json_data, true);
-        // $datas = $data['data'];
-
-        // if (!$datas) return false;
-
-        // $info = reset($datas);
-        // $date = explode(',', $info)[15];
-
-        // if (date('Y-m-d', strtotime($date)) != date('Y-m-d')) return false;
-
-        // xgo(function () {
-        //     $maxWorkers = 1;
-        //     $maxQueue   = 8;
-        //     $jobQueue   = new Channel($maxQueue);
-        //     $dispatch   = new Dispatcher([
-        //         'jobQueue'   => $jobQueue,
-        //         'maxWorkers' => $maxWorkers,
-        //     ]);
-
-        //     $dispatch->start(CoroutinePoolStockWorker::class);
-
-        //     while(!$this->quit) {
-        //         $jobQueue->push('goBeyond');
-        //         usleep(888888);
-        //         if (time() >= strtotime('18:00')) {
-        //             $dispatch->stop();
-        //             $this->quit = true;
-        //         }
-        //     }
-        // });
-
-        // Event::wait();
+        Event::wait();
     }
 
 }
