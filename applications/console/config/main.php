@@ -30,9 +30,9 @@ return [
             ],
         ],
 
-        'sk' => [
-            'Stock',
-            'description' => "\tStock handle.",
+        't' => [
+            'Test',
+            'description' => "\tTestCommand handle.",
             'options'     => [
                 [['hde', 'handle'], 'description' => 'handle'],
                 ['say', 'description' => "\tSay ..."],
