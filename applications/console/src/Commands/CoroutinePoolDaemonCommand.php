@@ -118,6 +118,7 @@ class CoroutinePoolDaemonCommand
                     $dispatch->stop();
                     return;
                 }
+
                 try {
                     $data = $redis->brPop(['queryList'], 3);
                     if (!$data) continue;
@@ -144,6 +145,12 @@ class CoroutinePoolDaemonCommand
                     ];
                     2 == $queue_list['type'] && $push_datas['url_keys'] = $queue_list['url_keys'];
                     $jobQueue->push($push_datas);
+
+                    $time = time();
+                    if (strtotime('09:15') >= $time || strtotime('20:00') <= $time) {
+                        $this->quit = true;
+                    }
+
                 } catch (\Throwable $e) {
                     echo $e->getTraceAsString();
                     $dispatch->stop();
