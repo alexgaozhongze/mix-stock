@@ -147,7 +147,7 @@ class CoroutinePoolDaemonCommand
                     $jobQueue->push($push_datas);
 
                     $time = time();
-                    if (strtotime('09:15') >= $time || strtotime('20:00') <= $time) {
+                    if (strtotime('09:15') >= $time || strtotime('18:00') <= $time) {
                         $this->quit = true;
                     }
 
