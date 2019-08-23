@@ -89,7 +89,7 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
             $connection->createCommand($sql)->execute();
         });
 
-        usleep(888888);
+        usleep(8888888);
 
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
@@ -198,7 +198,7 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
             $connection->createCommand($sql)->execute();
         }
 
-        usleep(888888);
+        usleep(8888888);
 
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);

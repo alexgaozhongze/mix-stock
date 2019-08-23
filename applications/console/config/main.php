@@ -21,6 +21,15 @@ return [
     // 命令
     'commands'         => [
 
+        'g' => [
+            'GoBeyond',
+            'description' => "\tGoBeyond handle.",
+            'options'     => [
+                [['hde', 'handle'], 'description' => 'handle'],
+                ['say', 'description' => "\tSay ..."],
+            ],
+        ],
+
         'd' => [
             'CoroutinePoolDaemon',
             'description' => "\tCoroutinePoolDaemon handle.",
