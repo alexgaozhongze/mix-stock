@@ -112,7 +112,6 @@ class CoroutinePoolDaemonCommand
             ]);
             $dispatch->start(CoroutinePoolWorker::class);
             // 投放任务
-            $redis = app()->redisPool->getConnection();
             while (true) {
                 if ($this->quit) {
                     $dispatch->stop();
@@ -120,7 +119,10 @@ class CoroutinePoolDaemonCommand
                 }
 
                 try {
+                    $redis = app()->redisPool->getConnection();
                     $data = $redis->brPop(['queryList'], 3);
+                    $redis->release();
+                    
                     if (!$data) continue;
 
                     $queue_list = unserialize(array_pop($data));

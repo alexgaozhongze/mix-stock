@@ -57,6 +57,9 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
                 self::pkyd($data['data']);
                 break;
         }
+
+        app()->dbPool->getConnection()->release();
+        app()->redisPool->getConnection()->release();
     }
 
     private function zjlx($data)
@@ -93,8 +96,13 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
 
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
+        $urls = [];
         for ($i = 1; $i <= $pages; $i ++) {
             $urls[] = "http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=$i&ps=50&js={%22pages%22:(pc),%22data%22:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=$timestamp";
+        }
+
+        if (!$urls) {
+            self::zjlx($data);
         }
 
         $queue_list = [
@@ -203,7 +211,7 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
         $timestamp = "$timestamp" . intval($microstamp * 1000);
 
         $urls = [
-            "http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=20&cb=&_=$timestamp"
+            "http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=100&cb=&_=$timestamp"
         ];
 
         $queue_list = [
