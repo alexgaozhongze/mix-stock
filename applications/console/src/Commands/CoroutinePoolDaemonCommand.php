@@ -80,7 +80,7 @@ class CoroutinePoolDaemonCommand
             $redis->lpush('queryList', serialize($queue_list));
 
             $urls = [
-                "http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=20&cb=&_=$timestamp"
+                "http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=100&cb=&_=$timestamp"
             ];
 
             $queue_list = [

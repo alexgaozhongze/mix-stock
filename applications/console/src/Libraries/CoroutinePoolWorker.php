@@ -102,7 +102,7 @@ class CoroutinePoolWorker extends AbstractWorker implements WorkerInterface
         }
 
         if (!$urls) {
-            self::zjlx($data);
+            return self::zjlx($data);
         }
 
         $queue_list = [
