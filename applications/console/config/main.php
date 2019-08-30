@@ -21,6 +21,9 @@ return [
     // 命令
     'commands'         => [
 
+        'zjlx' => ['Zjlx'],
+        'fscj' => ['Fscj'],
+
         'g' => [
             'GoBeyond',
             'description' => "\tGoBeyond handle.",
