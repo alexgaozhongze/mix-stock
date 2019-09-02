@@ -69,7 +69,7 @@ class ZjlxCommand
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
 
-        $page_size = 50;
+        $page_size = rand(8,88);
         $page_count = ceil($pages / $page_size);
         for ($i = 1; $i <= $page_count; $i ++) {
             $urls[] = "http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=$i&ps=$page_size&js={%22pages%22:(pc),%22data%22:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=$timestamp";
