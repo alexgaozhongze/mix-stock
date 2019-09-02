@@ -34,10 +34,9 @@ class FscjCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            $i = 3;
-            while ($i) {
-                $i --;
+            while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
                 self::handle();
+                usleep(888888);
             }
         });
     }
@@ -57,7 +56,7 @@ class FscjCommand
 
         $urls = $url_keys = [];
         array_walk($code_times, function($item) use (&$urls, &$url_keys, $timestamp) {
-            $page_size = 143;
+            $page_size = 144;
             $page = ceil(($item['count'] + 1) / $page_size);
 
             $key = str_pad($item['code'], 6, "0", STR_PAD_LEFT) . $item['type'];
