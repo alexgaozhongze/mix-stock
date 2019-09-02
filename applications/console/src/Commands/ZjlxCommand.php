@@ -59,7 +59,7 @@ class ZjlxCommand
 
             while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
                 self::handle($pages, $time_table_name);
-                usleep(8888888);
+                usleep(888888);
             }
         });
     }
