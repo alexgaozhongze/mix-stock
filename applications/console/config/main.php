@@ -23,6 +23,7 @@ return [
 
         'zjlx' => ['Zjlx'],
         'fscj' => ['Fscj'],
+        'pkyd' => ['Pkyd'],
 
         'g' => [
             'GoBeyond',
