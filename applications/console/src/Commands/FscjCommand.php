@@ -56,7 +56,7 @@ class FscjCommand
 
         $urls = $url_keys = [];
         array_walk($code_times, function($item) use (&$urls, &$url_keys, $timestamp) {
-            $page_size = 144;
+            $page_size = rand(8, 888);
             $page = ceil(($item['count'] + 1) / $page_size);
 
             $key = str_pad($item['code'], 6, "0", STR_PAD_LEFT) . $item['type'];
