@@ -35,6 +35,9 @@ class HqbjCommand
      * f39 卖1
      * f40 数量
      * f43 价格
+     * f170 涨幅
+     * f191 委比
+     * f192 委差
      */
     
     /*
@@ -51,27 +54,40 @@ class HqbjCommand
             $table_name = "hqbj_" . date('Ymd');
             $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
                 `code` mediumint(6) unsigned zerofill NOT NULL,
-                `s5` float(5,2) DEFAULT NULL,
-                `s4` float(5,2) DEFAULT NULL,
-                `s3` float(5,2) DEFAULT NULL,
-                `s2` float(5,2) DEFAULT NULL,
-                `s1` float(5,2) DEFAULT NULL,
-                `b1` float(5,2) DEFAULT NULL,
-                `b2` float(5,2) DEFAULT NULL,
-                `b3` float(5,2) DEFAULT NULL,
-                `b4` float(5,2) DEFAULT NULL,
-                `b5` float(5,2) DEFAULT NULL,
-                `ud` tinyint(4) NOT NULL,
+                `price` float(6,2) DEFAULT NULL,
+                `up` float(5,2) DEFAULT NULL,
+                `wb` float(5,2) DEFAULT NULL,
+                `wx` float(8,2) DEFAULT NULL,
+                `s5_p` float(6,2) DEFAULT NULL,
+                `s5_n` float(8,2) DEFAULT NULL,
+                `s4_p` float(6,2) DEFAULT NULL,
+                `s4_n` float(8,2) DEFAULT NULL,
+                `s3_p` float(6,2) DEFAULT NULL,
+                `s3_n` float(8,2) DEFAULT NULL,
+                `s2_p` float(6,2) DEFAULT NULL,
+                `s2_n` float(8,2) DEFAULT NULL,
+                `s1_p` float(6,2) DEFAULT NULL,
+                `s1_n` float(8,2) DEFAULT NULL,
+                `b1_p` float(6,2) DEFAULT NULL,
+                `b1_n` float(8,2) DEFAULT NULL,
+                `b2_p` float(6,2) DEFAULT NULL,
+                `b2_n` float(8,2) DEFAULT NULL,
+                `b3_p` float(6,2) DEFAULT NULL,
+                `b3_n` float(8,2) DEFAULT NULL,
+                `b4_p` float(6,2) DEFAULT NULL,
+                `b4_n` float(8,2) DEFAULT NULL,
+                `b5_p` float(6,2) DEFAULT NULL,
+                `b5_n` float(8,2) DEFAULT NULL,
                 `time` time NOT NULL,
                 `type` tinyint(4) NOT NULL,
                 PRIMARY KEY (`code`,`type`,`time`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            // while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
+            while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
                 self::handle();
                 usleep(888888);
-            // }
+            }
         });
     }
 
@@ -80,7 +96,7 @@ class HqbjCommand
         $connection=app()->dbPool->getConnection();
 
         $hqbj_table = 'hqbj_' . date('Ymd');
-        $sql = "SELECT `code` FROM `zjlx` WHERE `date`=CURDATE() AND LEFT(`code`,3) NOT IN (200,300,688,900) GROUP BY `code`";
+        $sql = "SELECT `code`,`type` FROM `zjlx` WHERE `date`=CURDATE() AND LEFT(`code`,3) NOT IN (200,300,688,900) AND `price` IS NOT NULL GROUP BY `code`";
 
         $codes = $connection->createCommand($sql)->queryAll();
         if (!$codes) return false;
@@ -90,12 +106,10 @@ class HqbjCommand
 
         $urls = $url_keys = [];
         array_walk($codes, function($item) use (&$urls, &$url_keys, $timestamp) {
-            $page_size = rand(8, 888);
-            $page = ceil(($item['count'] + 1) / $page_size);
+            $type = 2 == $item['type'] ? 0 : 1;
+            $key = $type . '.' . str_pad($item['code'], 6, "0", STR_PAD_LEFT);
 
-            $key = str_pad($item['code'], 6, "0", STR_PAD_LEFT) . $item['type'];
-
-            $urls[] = "http://push2.eastmoney.com/api/qt/stock/get?ut=fa5fd1943c7b386f172d6893dbfba10b&invt=2&fltt=2&fields=f43,f530&secid=2.000005&cb=jQuery18306333936537019735_1567564218395&_=$timestamp";
+            $urls[] = "http://push2.eastmoney.com/api/qt/stock/get?ut=fa5fd1943c7b386f172d6893dbfba10b&invt=2&fltt=2&fields=f43,f170,f191,f192,f530&secid=$key&_=$timestamp";
             $url_keys[] = $key;
         });
 
@@ -104,26 +118,27 @@ class HqbjCommand
             ->withOptions([
                 'timeout' => 3
             ])
-            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $fscj_table, $url_keys) {
+            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $hqbj_table, $url_keys) {
                 $data = $ql->getHtml();
 
                 $item = json_decode($data, true);
-                $datas = $item['data']['value']['data'] ?? [];
-                $pc = $item['data']['value']['pc'] ?? 0;
-    
-                $sql_fields = "INSERT IGNORE INTO `$fscj_table` (`code`, `price`, `up`, `num`, `bs`, `ud`, `time`, `type`) VALUES ";
+
+                $datas = $item['data'] ?? [];
+                if (!$datas) return false;
+
+                array_walk($datas, function(&$item, $key) {
+                    '-' == $item && $item = 'NULL';
+                    'f170' == $key && 'NULL' == $item && $item = 0;
+                });
+
+                list($type, $code) = explode('.', $url_keys[$index]);
+                0 == $type && $type = 2;
+
+                $sql_fields = "INSERT IGNORE INTO `$hqbj_table` (`code`, `price`, `up`, `wb`, `wx`, `s5_p`, `s5_n`, `s4_p`, `s4_n`, `s3_p`, `s3_n`, `s2_p`, `s2_n`, `s1_p`, `s1_n`, `b1_p`, `b1_n`, `b2_p`, `b2_n`, `b3_p`, `b3_n`, `b4_p`, `b4_n`, `b5_p`, `b5_n`, `time`, `type`) VALUES ";
                 $sql_values = "";
     
-                $code = substr($url_keys[$index], 0, 6);
-                $type = substr($url_keys[$index], 6, 1);
-    
-                array_walk($datas, function($iitem) use (&$sql_values, $pc, $code, $type) {
-                    list($time, $price, $num, $bs, $ud) = explode(',', $iitem);
-                    $sql_values && $sql_values .= ',';
-                    $up = bcmul(bcdiv(bcsub($price, $pc, 2), $pc, 4), 100, 2);
-    
-                    $sql_values .= "('$code', $price, $up, $num, $bs, $ud, '$time', $type)";
-                });
+                $time = date('H:i:s');
+                $sql_values .= "($code, $datas[f43], $datas[f170], $datas[f191], $datas[f192], $datas[f31], $datas[f32], $datas[f33], $datas[f34], $datas[f35], $datas[f36], $datas[f37], $datas[f38], $datas[f39], $datas[f40], $datas[f19], $datas[f20], $datas[f17], $datas[f18], $datas[f15], $datas[f16], $datas[f13], $datas[f14], $datas[f11], $datas[f12], '$time', $type)";
     
                 if ($sql_values) {
                     $sql = $sql_fields . $sql_values;
