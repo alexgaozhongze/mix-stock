@@ -24,6 +24,9 @@ return [
         'zjlx' => ['Zjlx'],
         'fscj' => ['Fscj'],
         'pkyd' => ['Pkyd'],
+        'hqbj' => ['Hqbj'],
+        'yyb' => ['Yyb'],
+        'si' => ['StockInfo'],
 
         'g' => [
             'GoBeyond',
