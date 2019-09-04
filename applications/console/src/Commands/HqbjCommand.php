@@ -86,7 +86,6 @@ class HqbjCommand
 
             while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
                 self::handle();
-                usleep(888888);
             }
         });
     }
