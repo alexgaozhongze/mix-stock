@@ -84,7 +84,7 @@ class HqbjCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
+            while ((strtotime('09:15') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:00') >= time())) {
                 self::handle();
             }
         });
@@ -113,7 +113,7 @@ class HqbjCommand
         });
 
         QueryList::multiGet($urls)
-            ->concurrency(8)
+            ->concurrency(38)
             ->withOptions([
                 'timeout' => 3
             ])
