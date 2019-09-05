@@ -57,7 +57,7 @@ class ZjlxCommand
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            while (strtotime('09:30') <= time() && strtotime('15:15') >= time()) {
+            while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
                 self::handle($pages, $time_table_name);
                 usleep(8888888);
             }
