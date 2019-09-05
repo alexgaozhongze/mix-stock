@@ -18,7 +18,7 @@ class PkydCommand
     public function main()
     {
         xgo(function () {
-            while (strtotime('09:15') < time() && strtotime('15:15') > time()) {
+            while (strtotime('09:30') <= time() && strtotime('15:00') >= time()) {
                 self::handle();
                 usleep(8888888);
             }
