@@ -34,37 +34,14 @@ class ZjlxCommand
             $date = explode(',', $info)[15];
             if (date('Y-m-d', strtotime($date)) != date('Y-m-d')) return false;
 
-            $connection = app()->dbPool->getConnection();
-
-            $time_table_name = 'zjlx_' . date('Ymd');
-            $sql = "CREATE TABLE IF NOT EXISTS `$time_table_name` (
-                `code` mediumint(6) unsigned zerofill NOT NULL,
-                `price` float(6,2) DEFAULT NULL,
-                `up` float(5,2) DEFAULT NULL,
-                `mar` float(5,2) DEFAULT NULL,
-                `mai` float(8,2) DEFAULT NULL,
-                `sur` float(5,2) DEFAULT NULL,
-                `sui` float(8,2) DEFAULT NULL,
-                `bir` float(5,2) DEFAULT NULL,
-                `bii` float(8,2) DEFAULT NULL,
-                `mir` float(5,2) DEFAULT NULL,
-                `mii` float(8,2) DEFAULT NULL,
-                `smr` float(5,2) DEFAULT NULL,
-                `smi` float(8,2) DEFAULT NULL,
-                `time` time NOT NULL,
-                `type` tinyint(4) NOT NULL,
-                PRIMARY KEY (`code`,`type`,`time`)
-              ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-            $connection->createCommand($sql)->execute();
-
             while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
-                self::handle($pages, $time_table_name);
-                usleep(8888888);
+                self::handle($pages);
+                usleep(88888888);
             }
         });
     }
 
-    public function handle($pages, $time_table_name)
+    public function handle($pages)
     {
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
@@ -80,7 +57,7 @@ class ZjlxCommand
             ->withOptions([
                 'timeout' => 3
             ])
-            ->success(function(QueryList $ql, Response $response, $index) use ($time_table_name) {
+            ->success(function(QueryList $ql, Response $response, $index) {
                 $connection = app()->dbPool->getConnection();
 
                 $json_data = $ql->getHtml();
@@ -89,29 +66,22 @@ class ZjlxCommand
                 if (!$datas) return false;
         
                 $sql_fields = "INSERT INTO `zjlx` (`code`, `price`, `up`, `mar`, `mai`, `sur`, `sui`, `bir`, `bii`, `mir`, `mii`, `smr`, `smi`, `date`, `name`, `type`) VALUES ";
-                $sql_fields_time = "INSERT INTO `$time_table_name` (`code`, `price`, `up`, `mar`, `mai`, `sur`, `sui`, `bir`, `bii`, `mir`, `mii`, `smr`, `smi`, `time`, `type`) VALUES ";
                 $sql_values = "";
-                $sql_values_time = "";
         
-                array_walk($datas, function($iitem) use (&$sql_values, &$sql_values_time) {
+                array_walk($datas, function($iitem) use (&$sql_values) {
                     $iitem = str_replace('-,', 'NULL,', $iitem);
                     $sql_values && $sql_values .= ',';
-                    $sql_values_time && $sql_values_time .= ',';
         
                     list($type, $code, $name, $price, $up, $mai, $mar, $sui, $sur, $bii, $bir, $mii, $mir, $smi, $smr, $date_time) = explode(',', $iitem);
                     $date = date('Y-m-d', strtotime($date_time));
-                    $time = date('H:i:s', strtotime($date_time));
         
                     $sql_values .= "('$code', $price, $up, $mar, $mai, $sur, $sui, $bir, $bii, $mir, $mii, $smr, $smi, '$date', '$name', $type)";
-                    $sql_values_time .= "('$code', $price, $up, $mar, $mai, $sur, $sui, $bir, $bii, $mir, $mii, $smr, $smi, '$time', $type)";
                 });
         
                 $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `up`=VALUES(`up`), `mar`=VALUES(`mar`), `mai`=VALUES(`mai`), `sur`=VALUES(`sur`), `sui`=VALUES(`sui`), `bir`=VALUES(`bir`), `bii`=VALUES(`bii`), `mir`=VALUES(`mir`), `mii`=VALUES(`mii`), `smr`=VALUES(`smr`), `smi`=VALUES(`smi`);";
         
                 $sql = $sql_fields . $sql_values . $sql_duplicate;
-                $sql_time = $sql_fields_time . $sql_values_time . $sql_duplicate;
                 $connection->createCommand($sql)->execute();
-                $connection->createCommand($sql_time)->execute();
         
             })->error(function (QueryList $ql, $reason, $index){
                 // ...
