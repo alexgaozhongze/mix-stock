@@ -117,7 +117,7 @@ class HqbjCommand
         });
 
         QueryList::multiGet($urls)
-            ->concurrency(38)
+            ->concurrency(8)
             ->withOptions([
                 'timeout' => 3
             ])
