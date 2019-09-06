@@ -28,7 +28,7 @@ class GoBeyondCommand
             $connection=app()->dbPool->getConnection();
             
             $date = date('Y-m-d');
-            $date = '2019-09-05';
+            // $date = '2019-09-05';
 
             $hqbj_table = 'hqbj_' . date('Ymd', strtotime($date));
 
@@ -48,9 +48,6 @@ class GoBeyondCommand
                     }
                 }
 
-                $sql = "SELECT `up`,`price` FROM `zjlx` WHERE `date`=curdate() and `code`=$zl_value[code]";
-                $zjlx_info = $connection->createCommand($sql)->queryOne();
-
                 $avg = bcdiv(bcdiv(bcadd($sum_b1, $sum_s1), $count), 2);
                 $end_avg = bcdiv($hl_value['b1_n'], $avg, 2);
 
@@ -59,10 +56,8 @@ class GoBeyondCommand
                 echo str_pad($zl_value['code'], 7)
                     ,str_pad($avg, 8)
                     ,str_pad($hl_value['s1_n'], 8)
-                    ,str_pad($zl_value['up'], 7)
-                    ,str_pad($zjlx_info['up'], 7)
                     ,str_pad($zl_value['price'], 7)
-                    ,str_pad($zjlx_info['price'], 7)
+                    ,str_pad($zl_value['up'], 7)
                     ,str_pad($end_avg, 4)
                     ,PHP_EOL;
 
