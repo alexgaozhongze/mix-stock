@@ -2,7 +2,6 @@
 
 namespace Console\Commands;
 
-use QL\QueryList;
 use Mix\Core\Event;
 
 /**
@@ -26,26 +25,54 @@ class GoBeyondCommand
     {
         xgo(function () {
 
-            $fp = fsockopen("50.push2.eastmoney.com",80, $errno, $errstr, 10) or die("$errstr ($errno)<br />\n");     
-            $out = "GET /api/qt/stock/sse?ut=fa5fd1943c7b386f172d6893dbfba10b&fltt=2&fields=f43,f57,f58,f169,f170,f46,f44,f51,f168,f47,f164,f116,f60,f45,f52,f50,f48,f167,f117,f71,f161,f49,f530,f135,f136,f137,f138,f139,f141,f142,f144,f145,f147,f148,f140,f143,f146,f149,f55,f62,f162,f92,f173,f104,f105,f84,f85,f183,f184,f185,f186,f187,f188,f189,f190,f191,f192,f206,f207,f208,f209,f210,f211,f212,f213,f214,f215,f86,f107,f111,f86,f177,f78,f110,f262,f263,f264,f267,f268,f250,f251,f252,f253,f254,f255,f256,f257,f258,f266,f269,f270,f271,f273,f274,f275&secid=0.300591 HTTP/1.1\r\n";     
-            $out .= "Host: 50.push2.eastmoney.com\r\n";     
-            $out .= "Connection: Close\r\n\r\n";     
-              
-            fwrite($fp, $out);     
-            while (!feof($fp)) {     
-                $res = fgets($fp, 128);     
-                var_dump($res);
-            }     
-            fclose($fp);     
+            $connection=app()->dbPool->getConnection();
+            
+            $date = date('Y-m-d');
+            $date = '2019-09-05';
+
+            $hqbj_table = 'hqbj_' . date('Ymd', strtotime($date));
+
+            $sql = "SELECT `code`,`type`,`up`,`price` FROM `zjlx` WHERE `date`='$date' AND LEFT(`code`,3) NOT IN (200,300,688,900) AND `price` IS NOT NULL ORDER BY `up` DESC";
+            $zjlx_list = $connection->createCommand($sql)->queryAll();
+
+            foreach ($zjlx_list as $zl_value) {
+                $sql = "SELECT `b1_n`, `s1_n`, `time` FROM `$hqbj_table` WHERE `code`=$zl_value[code] AND `type`=$zl_value[type]";
+                $hqbj_list = $connection->createCommand($sql)->queryAll();
+
+                $sum_b1 = $sum_s1 = $count = 0;
+                foreach ($hqbj_list as $hl_value) {
+                    if (strtotime($hl_value['time']) <= strtotime('14:57')) {
+                        $sum_b1 += $hl_value['b1_n'];
+                        $sum_s1 += $hl_value['s1_n'];
+                        $count ++;
+                    }
+                }
+
+                $sql = "SELECT `up`,`price` FROM `zjlx` WHERE `date`=curdate() and `code`=$zl_value[code]";
+                $zjlx_info = $connection->createCommand($sql)->queryOne();
+
+                $avg = bcdiv(bcdiv(bcadd($sum_b1, $sum_s1), $count), 2);
+                $end_avg = bcdiv($hl_value['b1_n'], $avg, 2);
+
+                if ($end_avg < 100) continue;
+
+                echo str_pad($zl_value['code'], 7)
+                    ,str_pad($avg, 8)
+                    ,str_pad($hl_value['s1_n'], 8)
+                    ,str_pad($zl_value['up'], 7)
+                    ,str_pad($zjlx_info['up'], 7)
+                    ,str_pad($zl_value['price'], 7)
+                    ,str_pad($zjlx_info['price'], 7)
+                    ,str_pad($end_avg, 4)
+                    ,PHP_EOL;
+
+            }
+
+
 
         });
 
         Event::wait();
-
-
-//http://50.push2.eastmoney.com/api/qt/stock/sse?ut=fa5fd1943c7b386f172d6893dbfba10b&fltt=2&fields=f43,f57,f58,f169,f170,f46,f44,f51,f168,f47,f164,f116,f60,f45,f52,f50,f48,f167,f117,f71,f161,f49,f530,f135,f136,f137,f138,f139,f141,f142,f144,f145,f147,f148,f140,f143,f146,f149,f55,f62,f162,f92,f173,f104,f105,f84,f85,f183,f184,f185,f186,f187,f188,f189,f190,f191,f192,f206,f207,f208,f209,f210,f211,f212,f213,f214,f215,f86,f107,f111,f86,f177,f78,f110,f262,f263,f264,f267,f268,f250,f251,f252,f253,f254,f255,f256,f257,f258,f266,f269,f270,f271,f273,f274,f275&secid=0.000068
-
-        
     }
 
 }
