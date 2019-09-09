@@ -23,7 +23,7 @@ class FscjCommand
             $table_name = "fscj_" . date('Ymd');
             $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
                 `code` mediumint(6) unsigned zerofill NOT NULL,
-                `price` float(5,2) DEFAULT NULL,
+                `price` float(6,2) DEFAULT NULL,
                 `up` float(5,2) DEFAULT NULL,
                 `num` int(11) DEFAULT NULL,
                 `bs` tinyint(4) NOT NULL,

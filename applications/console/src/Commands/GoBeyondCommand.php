@@ -24,12 +24,9 @@ class GoBeyondCommand
     public function main()
     {
         xgo(function () {
-
             $connection=app()->dbPool->getConnection();
             
             $date = date('Y-m-d');
-            // $date = '2019-09-05';
-
             $hqbj_table = 'hqbj_' . date('Ymd', strtotime($date));
 
             $sql = "SELECT `code`,`type`,`up`,`price` FROM `zjlx` WHERE `date`='$date' AND LEFT(`code`,3) NOT IN (200,300,688,900) AND `price` IS NOT NULL ORDER BY `up` DESC";
@@ -60,11 +57,7 @@ class GoBeyondCommand
                     ,str_pad($zl_value['up'], 7)
                     ,str_pad($end_avg, 4)
                     ,PHP_EOL;
-
             }
-
-
-
         });
 
         Event::wait();

@@ -27,6 +27,7 @@ return [
         'hqbj' => ['Hqbj'],
         'yyb' => ['Yyb'],
         'si' => ['StockInfo'],
+        'fscjavg' => ['FscjAvg'],
 
         'g' => [
             'GoBeyond',
