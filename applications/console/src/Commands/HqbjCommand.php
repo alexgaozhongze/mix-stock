@@ -88,7 +88,7 @@ class HqbjCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:00') >= time())) {
+            while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:01') > time())) {
                 self::handle();
             }
         });

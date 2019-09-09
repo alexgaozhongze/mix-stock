@@ -20,7 +20,6 @@ class FscjAvgCommand
             $connection=app()->dbPool->getConnection();
 
             $date = date('Y-m-d');
-            $date = '2019-09-06';
             $table_name = "fscj_" . date('Ymd', strtotime($date));
             
             $sql = "SELECT `code`,`type` FROM `$table_name` GROUP BY `code`";
