@@ -12,6 +12,28 @@ use GuzzleHttp\Psr7\Response;
  */
 class HsabCommand
 {
+        
+    /*
+     * f2 price 最新价
+     * f3 up 涨跌幅
+     * f4 upp 涨跌额
+     * f5 cjs 成交手
+     * f6 cje 成交额
+     * f7 zf 振幅
+     * f8 hsl 换手率
+     * f9 syl 市盈率
+     * f10 lb 量比
+     * 
+     * 
+     * f12 code
+     * f13 type
+     * f14 name
+     * f15 zg 最高
+     * f16 zd 最低
+     * f17 jk 今开
+     * f18 zs 昨收
+     * f23 sjl 市净率
+     */
 
     /**
      * 主函数
@@ -21,22 +43,21 @@ class HsabCommand
         xgo(function () {
             list($microstamp, $timestamp) = explode(' ', microtime());
             $timestamp = "$timestamp" . intval($microstamp * 1000);
-    
-            $ql = QueryList::get("http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=1&js={%22pages%22:(pc),%22data%22:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=$timestamp");
-    
+
+            $ql = QueryList::get("http://50.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=1&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:13,m:0+t:80,m:1+t:2&fields=f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f23&_=$timestamp");
+        
             $json_data = $ql->getHtml();
             $data = json_decode($json_data, true);
-            $datas = $data['data'] ?? false;
-            $pages = $data['pages'] ?? 0;
+
+            $datas = $data['data']['diff'] ?? false;
+            $pages = $data['data']['total'] ?? 0;
             if (!$datas) return false;
 
             $info = reset($datas);
-            $date = explode(',', $info)[15];
-            if (date('Y-m-d', strtotime($date)) != date('Y-m-d')) return false;
 
-            while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
+            while (self::goSync()) {
                 self::handle($pages);
-                usleep(88888888);
+                usleep(8888888);
             }
         });
     }
@@ -45,11 +66,13 @@ class HsabCommand
     {
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
+        $date = date('Y-m-d');
 
         $page_size = rand(8,88);
         $page_count = ceil($pages / $page_size);
         for ($i = 1; $i <= $page_count; $i ++) {
-            $urls[] = "http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=$i&ps=$page_size&js={%22pages%22:(pc),%22data%22:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=$timestamp";
+            $rand = rand(8,88);
+            $urls[] = "http://$rand.push2.eastmoney.com/api/qt/clist/get?pn=$i&pz=$page_size&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:13,m:0+t:80,m:1+t:2&fields=f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f23&_=$timestamp";
         }
 
         QueryList::multiGet($urls)
@@ -57,28 +80,28 @@ class HsabCommand
             ->withOptions([
                 'timeout' => 3
             ])
-            ->success(function(QueryList $ql, Response $response, $index) {
+            ->success(function(QueryList $ql, Response $response, $index) use ($date) {
                 $connection = app()->dbPool->getConnection();
 
                 $json_data = $ql->getHtml();
                 $data = json_decode($json_data, true);
-                $datas = $data['data'] ?? false;
+                $datas = $data['data']['diff'] ?? false;
                 if (!$datas) return false;
-        
-                $sql_fields = "INSERT INTO `zjlx` (`code`, `price`, `up`, `mar`, `mai`, `sur`, `sui`, `bir`, `bii`, `mir`, `mii`, `smr`, `smi`, `date`, `name`, `type`) VALUES ";
+
+                $sql_fields = "INSERT INTO `hsab` (`code`, `price`, `up`, `upp`, `cjs`, `cje`, `zf`, `zg`, `zd`, `jk`, `zs`, `lb`, `hsl`, `syl`, `sjl`, `date`, `name`, `type`) VALUES ";
                 $sql_values = "";
-        
-                array_walk($datas, function($iitem) use (&$sql_values) {
-                    $iitem = str_replace('-,', 'NULL,', $iitem);
+
+                foreach ($datas as $value) {
+                    foreach ($value as $v_key => $v_value) {
+                        '-' === $v_value && $value[$v_key] = 'NULL';
+                    }
+
                     $sql_values && $sql_values .= ',';
+                    $type = $value['f13'] ?: 2;
+                    $sql_values .= "($value[f12], $value[f2], $value[f3], $value[f4], $value[f5], $value[f6], $value[f7], $value[f15], $value[f16], $value[f17], $value[f18], $value[f10], $value[f8], $value[f9], $value[f23], '$date', '$value[f14]', $type)";
+                }
         
-                    list($type, $code, $name, $price, $up, $mai, $mar, $sui, $sur, $bii, $bir, $mii, $mir, $smi, $smr, $date_time) = explode(',', $iitem);
-                    $date = date('Y-m-d', strtotime($date_time));
-        
-                    $sql_values .= "('$code', $price, $up, $mar, $mai, $sur, $sui, $bir, $bii, $mir, $mii, $smr, $smi, '$date', '$name', $type)";
-                });
-        
-                $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `up`=VALUES(`up`), `mar`=VALUES(`mar`), `mai`=VALUES(`mai`), `sur`=VALUES(`sur`), `sui`=VALUES(`sui`), `bir`=VALUES(`bir`), `bii`=VALUES(`bii`), `mir`=VALUES(`mir`), `mii`=VALUES(`mii`), `smr`=VALUES(`smr`), `smi`=VALUES(`smi`);";
+                $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `up`=VALUES(`up`), `upp`=VALUES(`upp`), `cjs`=VALUES(`cjs`), `cje`=VALUES(`cje`), `zf`=VALUES(`zf`), `zg`=VALUES(`zg`), `zd`=VALUES(`zd`), `jk`=VALUES(`jk`), `zs`=VALUES(`zs`), `lb`=VALUES(`lb`), `hsl`=VALUES(`hsl`), `syl`=VALUES(`syl`), `sjl`=VALUES(`sjl`);";
         
                 $sql = $sql_fields . $sql_values . $sql_duplicate;
                 $connection->createCommand($sql)->execute();
@@ -88,6 +111,12 @@ class HsabCommand
             })->send();
 
         app()->dbPool->getConnection()->release();
+    }
+
+    private function goSync()
+    {
+        if (strtotime('09:30') <= time() && strtotime('11:30') >= time()) return true;
+        else if (strtotime('13:00') <= time() && strtotime('15:15') >= time()) return true;
     }
 
 }

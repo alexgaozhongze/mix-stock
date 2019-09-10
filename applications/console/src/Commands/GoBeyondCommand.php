@@ -27,6 +27,7 @@ class GoBeyondCommand
             $connection=app()->dbPool->getConnection();
             
             $date = date('Y-m-d');
+            $date = date('Y-m-d', strtotime("-1 days"));
             $hqbj_table = 'hqbj_' . date('Ymd', strtotime($date));
 
             $sql = "SELECT `code`,`type`,`up`,`price` FROM `zjlx` WHERE `date`='$date' AND LEFT(`code`,3) NOT IN (200,300,688,900) AND `price` IS NOT NULL ORDER BY `up` DESC";
