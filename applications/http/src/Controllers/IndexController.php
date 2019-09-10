@@ -25,14 +25,12 @@ class IndexController
      */
     public function actionIndex(HttpRequestInterface $request, HttpResponseInterface $response)
     {
-        $connection=app()->dbPool->getConnection();
+        $connection=app()->db;
 
         $fscj_table = 'fscj_' . date('Ymd');
 
         $sql = "SELECT `a`.`code`,`a`.`price`,`b`.`price` AS `nprice`,`a`.`up`,`b`.`up` AS `nup`,`a`.`num`,`a`.`time` FROM `$fscj_table` AS `a` LEFT JOIN `hsab` AS `b` ON `a`.`code`=`b`.`code` AND `b`.`date`=CURDATE() WHERE `a`.`bs`=2 AND `a`.`ud`=1 AND `a`.`up`<=5 AND `a`.`time`<='09:30:59' AND `a`.`time`>='09:30:00' ORDER BY `a`.`num` DESC LIMIT 88";
         $zjlx_list = $connection->createCommand($sql)->queryAll();
-
-        var_dump($zjlx_list);
 
         $data = [
             'list' => $zjlx_list,
