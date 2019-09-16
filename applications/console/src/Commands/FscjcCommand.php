@@ -48,9 +48,10 @@ class FscjcCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            // while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
+            while (strtotime('15:30') <= time() && strtotime('16:00') >= time()) {
                 self::handle();
-            // }
+                usleep(888888);
+            }
         });
     }
 
