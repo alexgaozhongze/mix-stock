@@ -19,6 +19,20 @@ class FscjCommand
     public function main()
     {
         xgo(function () {
+            list($microstamp, $timestamp) = explode(' ', microtime());
+            $timestamp = "$timestamp" . intval($microstamp * 1000);
+
+            $ql = QueryList::get("http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=1&js={%22pages%22:(pc),%22data%22:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=$timestamp");
+    
+            $json_data = $ql->getHtml();
+            $data = json_decode($json_data, true);
+            $datas = $data['data'] ?? false;
+            if (!$datas) return false;
+
+            $info = reset($datas);
+            $date = explode(',', $info)[15];
+            if (date('Y-m-d', strtotime($date)) != date('Y-m-d')) return false;
+            
             $connection=app()->dbPool->getConnection();
             $table_name = "fscj_" . date('Ymd');
             $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
