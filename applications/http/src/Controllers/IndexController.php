@@ -10,7 +10,7 @@ use Mix\Http\View\ViewTrait;
 /**
  * Class IndexController
  * @package Http\Controllers
- * @author liu,jian <coder.keda@gmail.com>
+ * @author alex <alexgaozhongze@gmail.com>
  */
 class IndexController
 {

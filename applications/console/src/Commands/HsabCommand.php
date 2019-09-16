@@ -66,7 +66,7 @@ class HsabCommand
 
             while (self::goSync()) {
                 self::handle($pages);
-                usleep(8888888);
+                usleep(888888);
             }
         });
     }

@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response;
  * @package Console\Commands
  * @author alex <alexgaozhongze@gmail.com>
  */
-class FscjCommand
+class FscjcCommand
 {
 
     /**
@@ -34,7 +34,7 @@ class FscjCommand
             if (date('Y-m-d', strtotime($date)) != date('Y-m-d')) return false;
             
             $connection=app()->dbPool->getConnection();
-            $table_name = "fscj_" . date('Ymd');
+            $table_name = "fscj_c_" . date('Ymd');
             $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
                 `code` mediumint(6) unsigned zerofill NOT NULL,
                 `price` float(6,2) DEFAULT NULL,
@@ -48,10 +48,9 @@ class FscjCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
+            // while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
                 self::handle();
-                usleep(888888);
-            }
+            // }
         });
     }
 
@@ -59,7 +58,7 @@ class FscjCommand
     {
         $connection=app()->dbPool->getConnection();
 
-        $fscj_table = 'fscj_' . date('Ymd');
+        $fscj_table = 'fscj_c_' . date('Ymd');
         $sql = "SELECT `a`.`code`,`a`.`type`,COUNT(`b`.`code`) AS `count` FROM `hsab` AS `a` LEFT JOIN `$fscj_table` AS `b` ON `a`.`code`=`b`.`code` AND `a`.`type`=`b`.`type` WHERE `a`.`date`=CURDATE() GROUP BY `code`";
 
         $code_times = $connection->createCommand($sql)->queryAll();
