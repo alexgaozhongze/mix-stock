@@ -1,5 +1,5 @@
 <?php
-$this->title = 'GoBeyond';
+$this->title = 'go beyond';
 ?>
 
 <table>
