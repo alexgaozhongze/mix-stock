@@ -25,12 +25,20 @@ class GoBeyondCommand
     {
         xgo(function () {
             $connection=app()->dbPool->getConnection();
-            
-            $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='2019-09-11' and up>=9.9";
-            $list = $connection->createCommand($sql)->queryAll();
+            $dates = dates(10);
 
-            var_dump($list);
+            $sql = "select code,type from hsab where date=curdate() and up>=9.9";
+            $hsab_list = $connection->createCommand($sql)->queryAll();
 
+            foreach ($hsab_list as $hsab_value) {
+                foreach ($dates as $dates_value) {
+                    $fscj_table = 'fscj_' . date('Ymd', strtotime($dates_value));
+                    $sql = "SELECT * FROM `$fscj_table` WHERE `code`=$hsab_value[code] AND `type`=$hsab_value[type] AND `time`<='09:30:03'";
+                    $fscj_list = $connection->createCommand($sql)->queryAll();
+                    echo $hsab_value['code'], '   ', $dates_value, PHP_EOL;
+                    shellPrint($fscj_list);
+                }
+            }
         });
 
         Event::wait();
