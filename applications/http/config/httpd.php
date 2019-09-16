@@ -35,4 +35,12 @@ return [
         'package_max_length' => 2 * 1024 * 1024,
     ],
 
+    // 路由规则
+    'rules'          => [
+        // 一级路由
+        ':controller/:action' => [':controller', ':action'],
+        // 二级路由
+        'api/:controller/:action' => ['api/:controller', ':action'],
+    ],
+
 ];
