@@ -34,10 +34,16 @@ class GoBeyondCommand
                 foreach ($dates as $dates_value) {
                     $fscj_table = 'fscj_' . date('Ymd', strtotime($dates_value));
                     $sql = "SELECT * FROM `$fscj_table` WHERE `code`=$hsab_value[code] AND `type`=$hsab_value[type] AND `time`<='09:30:03'";
-                    $fscj_list = $connection->createCommand($sql)->queryAll();
-                    echo $hsab_value['code'], '   ', $dates_value, PHP_EOL;
-                    shellPrint($fscj_list);
+                    $fscj_begin_list = $connection->createCommand($sql)->queryAll();
+                    $sql = "SELECT * FROM `$fscj_table` WHERE `code`=$hsab_value[code] AND `type`=$hsab_value[type] AND `time`>='14:57:00'";
+                    $fscj_end_list = $connection->createCommand($sql)->queryAll();
+                    $sql = "SELECT `up` FROM `hsab` WHERE  `code`=$hsab_value[code] AND `type`=$hsab_value[type] AND `date`='$dates_value'";
+                    $hsab_info = $connection->createCommand($sql)->queryOne();
+                    echo $hsab_value['code'], '   ', $dates_value, '   ', $hsab_info['up'], PHP_EOL;
+                    shellPrint($fscj_begin_list);
+                    shellPrint($fscj_end_list);
                 }
+                echo '---------------------------------------------------------------------------------------------------', PHP_EOL, PHP_EOL;
             }
         });
 

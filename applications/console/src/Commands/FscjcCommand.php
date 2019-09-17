@@ -48,7 +48,7 @@ class FscjcCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            while (strtotime('15:30') <= time() && strtotime('16:00') >= time()) {
+            while (strtotime('15:00') <= time() && strtotime('16:00') >= time()) {
                 self::handle();
                 usleep(888888);
             }
@@ -91,7 +91,7 @@ class FscjcCommand
                 $datas = $item['data']['value']['data'] ?? [];
                 $pc = $item['data']['value']['pc'] ?? 0;
     
-                $sql_fields = "INSERT IGNORE INTO `$fscj_table` (`code`, `price`, `up`, `num`, `bs`, `ud`, `time`, `type`) VALUES ";
+                $sql_fields = "INSERT INTO `$fscj_table` (`code`, `price`, `up`, `num`, `bs`, `ud`, `time`, `type`) VALUES ";
                 $sql_values = "";
     
                 $code = substr($url_keys[$index], 0, 6);
@@ -106,7 +106,9 @@ class FscjcCommand
                 });
     
                 if ($sql_values) {
-                    $sql = $sql_fields . $sql_values;
+                    $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `up`=VALUES(`up`), `num`=VALUES(`num`), `bs`=VALUES(`bs`), `ud`=VALUES(`ud`);";
+
+                    $sql = $sql_fields . $sql_values . $sql_duplicate;
                     $connection->createCommand($sql)->execute();
                 }
             })->error(function (QueryList $ql, $reason, $index){
