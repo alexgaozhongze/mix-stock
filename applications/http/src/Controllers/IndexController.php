@@ -31,8 +31,9 @@ class IndexController
         $pre_date = reset($dates);
 
         $sql = "select *,round(cjs/avg_cjs, 2) pre from (
-                    select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,b.cjs,b.price from hsab a
+                    select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,round(avg(d.up), 2) avg_up,b.cjs,b.price from hsab a
                     left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
+                    left join fscj_20190923 d on a.code=d.code and a.type=d.type
                     where a.date<>curdate() 
                         and LEFT(a.code,3) NOT IN (200,300,688,900) 
                         and left(a.name, 1) not in ('*', 'S') 
@@ -40,7 +41,7 @@ class IndexController
                         and a.code not in (select code from hsab where up>=9 and date='$pre_date')
                         group by a.code
                     ) as a
-                where cjs >= avg_cjs order by pre desc;";
+                where cjs >= avg_cjs and avg_up>=0 order by pre desc;";
 
         $list = $connection->createCommand($sql)->queryAll();
         
