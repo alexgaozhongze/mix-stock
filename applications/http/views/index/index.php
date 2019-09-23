@@ -5,7 +5,6 @@ $this->title = 'go beyond';
 <style type='text/css'>
 body {
   text-align: center;
-  font-size: 20px;
 }
 
 td {
@@ -16,7 +15,7 @@ td {
 </style>
 </head>
 
-<table width='88%' style="margin-left:10%;font-size:2em;">
+<table width='88%' style="margin-left:10%;font-size:2.8em;">
     <tr>
         <td>code</td>
         <td>avg_cjs</td>
