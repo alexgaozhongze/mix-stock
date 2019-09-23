@@ -30,7 +30,7 @@ class IndexController
         $dates = GoBeyond::dates(1);
         $pre_date = reset($dates);
 
-        $sql = "select *,cjs/avg_cjs pre from (
+        $sql = "select *,round(cjs/avg_cjs, 2) pre from (
             select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,b.cjs from hsab a
             left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
             where a.date<>curdate() 
