@@ -27,14 +27,25 @@ class IndexController
     public function actionIndex(HttpRequestInterface $request, HttpResponseInterface $response)
     {
         $connection=app()->db;
+        $dates = GoBeyond::dates(1);
+        $pre_date = reset($dates);
 
-        $fscj_table = 'fscj_' . date('Ymd');
+        $sql = "select *,cjs/avg_cjs pre from (
+            select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,b.cjs from hsab a
+            left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
+            where a.date<>curdate() 
+                and LEFT(a.code,3) NOT IN (200,300,688,900) 
+                and left(a.name, 1) not in ('*', 'S') 
+                and right(a.name, 1)<>'退' 
+                and a.code not in (select code from hsab where up>=9 and date='$pre_date')
+                group by a.code
+            ) as a
+        where cjs >= avg_cjs order by pre desc";
 
-        $sql = "SELECT `a`.`code`,`a`.`price`,`b`.`price` AS `nprice`,`a`.`up`,`b`.`up` AS `nup`,`a`.`num`,`a`.`time` FROM `$fscj_table` AS `a` LEFT JOIN `hsab` AS `b` ON `a`.`code`=`b`.`code` AND `b`.`date`=CURDATE() WHERE `a`.`bs`=2 AND `a`.`ud`=1 AND `a`.`up`<=5 AND `a`.`time`<='09:30:59' AND `a`.`time`>='09:30:00' ORDER BY `a`.`num` DESC LIMIT 88";
-        $zjlx_list = $connection->createCommand($sql)->queryAll();
-
+        $list = $connection->createCommand($sql)->queryAll();
+        
         $data = [
-            'list' => $zjlx_list,
+            'list' => $list
         ];
         return $this->render('index', $data);
     }

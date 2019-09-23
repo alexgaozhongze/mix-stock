@@ -8,24 +8,13 @@
 function dates($limit=10)
 {
     $connection=app()->dbPool->getConnection();
-    $sql = "SELECT `date` FROM `hsab` GROUP BY `date` LIMIT $limit";
+    $sql = "SELECT `date` FROM `hsab` WHERE `date`<>CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT $limit";
     $date_list = $connection->createCommand($sql)->queryAll();
 
-    return [
-        '2019-09-02',
-        '2019-09-03',
-        '2019-09-04',
-        '2019-09-05',
-        '2019-09-06',
-        '2019-09-09',
-        '2019-09-10',
-        '2019-09-11',
-        '2019-09-12',
-        '2019-09-16',
-        '2019-09-17'
-    ];
+    $list = array_column($date_list, 'date');
+    sort($list);
 
-    return array_column($date_list, 'date');
+    return $list;
 }
 
 function shellPrint($datas)

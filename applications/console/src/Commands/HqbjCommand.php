@@ -113,7 +113,7 @@ class HqbjCommand
         $connection=app()->dbPool->getConnection();
 
         $hqbj_table = 'hqbj_' . date('Ymd');
-        $sql = "SELECT `code`,`type` FROM `zjlx` WHERE `date`=CURDATE() AND LEFT(`code`,3) NOT IN (200,300,688,900) AND `price` IS NOT NULL GROUP BY `code`";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND LEFT(`code`,3) NOT IN (200,300,688,900) AND `price` IS NOT NULL GROUP BY `code`";
 
         $codes = $connection->createCommand($sql)->queryAll();
         if (!$codes) return false;
