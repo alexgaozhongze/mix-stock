@@ -15,7 +15,7 @@ td {
 </style>
 </head>
 
-<table width='88%' style="margin-left:10%;font-size:2.8em;">
+<table width='88%' style="margin-left:8%;font-size:2.5em;">
     <tr>
         <td>code</td>
         <td>avg_cjs</td>
