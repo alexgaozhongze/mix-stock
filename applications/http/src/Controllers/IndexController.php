@@ -29,11 +29,12 @@ class IndexController
         $connection=app()->db;
         $dates = GoBeyond::dates(1);
         $pre_date = reset($dates);
+        $fscj_table = 'fscj_' . date('Ymd');
 
         $sql = "select *,round(cjs/avg_cjs, 2) pre from (
                     select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,round(avg(d.up), 2) avg_up,b.cjs,b.price from hsab a
                     left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
-                    left join fscj_20190923 d on a.code=d.code and a.type=d.type
+                    left join $fscj_table d on a.code=d.code and a.type=d.type
                     where a.date<>curdate() 
                         and LEFT(a.code,3) NOT IN (200,300,688,900) 
                         and left(a.name, 1) not in ('*', 'S') 
