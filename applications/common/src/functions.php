@@ -5,6 +5,15 @@
  * @author alex <alexgaozhongze@gmail.com>
  */
 
+function checkOpen()
+{
+    $connection=app()->dbPool->getConnection();
+    $sql = "SELECT `date` FROM `hsab` WHERE `date`=CURDATE() LIMIT 1";
+    $date_exists = $connection->createCommand($sql)->queryOne();
+
+    return $date_exists ? true : false;
+}
+
 function dates($limit=10)
 {
     $connection=app()->dbPool->getConnection();

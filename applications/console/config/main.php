@@ -31,6 +31,8 @@ return [
         'si' => ['StockInfo'],
         'fscjavg' => ['FscjAvg'],
 
+        'cjsr' => ['CjsReasoning'],
+
         'g' => [
             'GoBeyond',
             'description' => "\tGoBeyond handle.",
