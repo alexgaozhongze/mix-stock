@@ -37,7 +37,6 @@ class PkydCommand
         if (!$exists) return false;
 
         $page_size = rand(8,88);
-        $page_size = 10000;
         $ql = QueryList::get("http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=$page_size&cb=&_=$timestamp");
 
         $json_data = $ql->getHtml();
