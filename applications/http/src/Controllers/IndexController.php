@@ -32,7 +32,7 @@ class IndexController
         $fscj_table = 'fscj_' . date('Ymd');
 
         $sql = "select *,round(cjs/avg_cjs, 2) pre from (
-                    select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,round(avg(d.up), 2) avg_up,b.cjs,b.price from hsab a
+                    select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,round(avg(d.up), 2) avg_up,b.cjs,b.price,max(d.up) as max_up from hsab a
                     left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
                     left join $fscj_table d on a.code=d.code and a.type=d.type
                     where a.date<>curdate() 
@@ -42,7 +42,7 @@ class IndexController
                         and a.code not in (select code from hsab where up>=9 and date='$pre_date')
                         group by a.code
                     ) as a
-                where cjs >= avg_cjs and avg_up>=0 order by pre desc;";
+                where cjs >= avg_cjs and avg_up>=0 and max_up<=9 order by pre desc;";
 
         $list = $connection->createCommand($sql)->queryAll();
         
