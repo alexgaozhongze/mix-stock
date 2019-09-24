@@ -32,11 +32,12 @@ class PkydCommand
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
 
-        $sql = "SELECT `code` FROM `zjlx` WHERE `date`=CURDATE() LIMIT 1";
+        $sql = "SELECT `code` FROM `hsab` WHERE `date`=CURDATE() LIMIT 1";
         $exists = $connection->createCommand($sql)->queryOne();
         if (!$exists) return false;
 
         $page_size = rand(8,88);
+        $page_size = 10000;
         $ql = QueryList::get("http://nuyd.eastmoney.com/EM_UBG_PositionChangesInterface/api/js?style=top&js=([(x)])&ac=normal&check=itntcd&dtformat=HH:mm:ss&num=$page_size&cb=&_=$timestamp");
 
         $json_data = $ql->getHtml();
