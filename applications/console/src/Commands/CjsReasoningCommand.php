@@ -75,7 +75,7 @@ class CjsReasoningCommand
         $list = $connection->createCommand($sql)->queryAll();
         
         $reasoning_table = 'cjs_reasoning_' . date('Ymd');
-        $time = date('H:i:s');
+        $time = date('H:i');
         $sql_fields = "INSERT INTO `$reasoning_table` (`code`, `price`, `up`, `avg_up`, `max_up`, `cjs`, `avg_cjs`, `pre`, `time`, `type`) VALUES ";
         $sql_values = "";
 
