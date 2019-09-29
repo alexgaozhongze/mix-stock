@@ -90,4 +90,9 @@ class CjsReasoningCommand
         $connection->createCommand($sql)->execute();
     }
 
+    /**
+     * http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHKStockCount?node=qbgg_hk
+     * http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHKStockData?page=1&num=40&sort=changepercent&asc=0&node=qbgg_hk&_s_r_a=init
+     */
+
 }
