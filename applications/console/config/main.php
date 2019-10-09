@@ -21,6 +21,7 @@ return [
     // 命令
     'commands'         => [
 
+        'hk' => ['Hk'],
         'hsab' => ['Hsab'],
         'zjlx' => ['Zjlx'],
         'fscj' => ['Fscj'],

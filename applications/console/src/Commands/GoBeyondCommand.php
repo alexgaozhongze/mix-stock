@@ -25,26 +25,41 @@ class GoBeyondCommand
     {
         xgo(function () {
             $connection=app()->dbPool->getConnection();
-            $dates = dates(1);
-            $pre_date = reset($dates);
-            $fscj_table = 'fscj_' . date('Ymd');
 
-            $sql = "select *,round(cjs/avg_cjs, 2) pre from (
-                        select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,round(avg(d.up), 2) avg_up,b.cjs,b.price,max(d.up) as max_up from hsab a
-                        left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
-                        left join $fscj_table d on a.code=d.code and a.type=d.type
-                        where a.date<>curdate() 
-                            and LEFT(a.code,3) NOT IN (200,300,688,900) 
-                            and left(a.name, 1) not in ('*', 'S') 
-                            and right(a.name, 1)<>'退' 
-                            and a.code not in (select code from hsab where up>=9 and date='$pre_date')
-                            group by a.code
-                        ) as a
-                    where cjs >= avg_cjs and avg_up>=0 and max_up<=9 order by pre desc;";
-
+            $sql = "select code,zf from hsab 
+                        where date='2019-09-19'
+                            and LEFT(code,3) NOT IN (200,300,688,900) 
+                            and left(name, 1) not in ('*', 'S') 
+                            and right(name, 1)<>'退' 
+                            and code not in (select code from hsab where up>=9 and date='2019-09-18') group by code";
             $list = $connection->createCommand($sql)->queryAll();
+
+            foreach ($list as $value) {
+                $sql = "select avg(num) as a_num from fscj_20190919 where code=$value[code]";
+                $info = $connection->createCommand($sql)->queryOne();
+                $avg_num = $info['a_num'];
+
+                $sql = "select s1_n as num from hqbj_20190919 where code=$value[code] and time<='15:00:00' order by time desc";
+                $info = $connection->createCommand($sql)->queryOne();
+                $num = $info['num'];
+
+                $sql = "select up,zf from hsab where code=$value[code] and date='2019-09-20'";
+                $info = $connection->createCommand($sql)->queryOne();
+                $up = $info['up'];
+                $zf = $info['up'];
+
+                echo str_pad($value['code'], 8)
+                ,str_pad($value['zf'], 8)
+                ,str_pad($zf, 8)
+                ,str_pad(intval($avg_num), 8)
+                ,str_pad($num, 8)
+                ,str_pad($up, 8)
+                ,PHP_EOL;
+            }
+
+            // var_dump($list);
             
-            shellPrint($list);
+            // shellPrint($listZ);
         });
 
         Event::wait();
