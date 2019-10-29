@@ -35,6 +35,7 @@ class GoBeyondCommand
             $list = $connection->createCommand($sql)->queryAll();
 
             foreach ($list as $value) {
+                $sql = "select sum(num) as snum from fscj_20190919 where code=810 and time>='14:30:00' and time<='15:00:00' and bs=1";
                 $sql = "select avg(num) as a_num from fscj_20190919 where code=$value[code]";
                 $info = $connection->createCommand($sql)->queryOne();
                 $avg_num = $info['a_num'];
