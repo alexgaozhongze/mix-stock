@@ -26,14 +26,8 @@ return [
         'hsab' => ['Hsab'],
         'zjlx' => ['Zjlx'],
         'fscj' => ['Fscj'],
-        'fscjc' => ['Fscjc'],
         'pkyd' => ['Pkyd'],
         'hqbj' => ['Hqbj'],
-        'yyb' => ['Yyb'],
-        'si' => ['StockInfo'],
-        'fscjavg' => ['FscjAvg'],
-
-        'cjsr' => ['CjsReasoning'],
 
         'g' => [
             'GoBeyond',
