@@ -22,12 +22,10 @@ return [
     'commands'         => [
 
         'hq' => ['Hq'],
-        'txzq' => ['Txzq'],
         'hsab' => ['Hsab'],
-        'zjlx' => ['Zjlx'],
         'fscj' => ['Fscj'],
-        'pkyd' => ['Pkyd'],
         'hqbj' => ['Hqbj'],
+        'pkyd' => ['Pkyd'],
 
         'g' => [
             'GoBeyond',

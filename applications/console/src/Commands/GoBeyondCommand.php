@@ -26,41 +26,33 @@ class GoBeyondCommand
         xgo(function () {
             $connection=app()->dbPool->getConnection();
 
-            $sql = "select code,zf from hsab 
-                        where date='2019-09-19'
-                            and LEFT(code,3) NOT IN (200,300,688,900) 
-                            and left(name, 1) not in ('*', 'S') 
-                            and right(name, 1)<>'退' 
-                            and code not in (select code from hsab where up>=9 and date='2019-09-18') group by code";
+            $code = 2157;
+            $sql = "select * from hq_20191016 where code=$code
+                    union
+                    select * from hq_20191017 where code=$code
+                    union
+                    select * from hq_20191018 where code=$code";
             $list = $connection->createCommand($sql)->queryAll();
 
-            foreach ($list as $value) {
-                $sql = "select sum(num) as snum from fscj_20190919 where code=810 and time>='14:30:00' and time<='15:00:00' and bs=1";
-                $sql = "select avg(num) as a_num from fscj_20190919 where code=$value[code]";
-                $info = $connection->createCommand($sql)->queryOne();
-                $avg_num = $info['a_num'];
-
-                $sql = "select s1_n as num from hqbj_20190919 where code=$value[code] and time<='15:00:00' order by time desc";
-                $info = $connection->createCommand($sql)->queryOne();
-                $num = $info['num'];
-
-                $sql = "select up,zf from hsab where code=$value[code] and date='2019-09-20'";
-                $info = $connection->createCommand($sql)->queryOne();
-                $up = $info['up'];
-                $zf = $info['up'];
-
-                echo str_pad($value['code'], 8)
-                ,str_pad($value['zf'], 8)
-                ,str_pad($zf, 8)
-                ,str_pad(intval($avg_num), 8)
-                ,str_pad($num, 8)
-                ,str_pad($up, 8)
-                ,PHP_EOL;
+            $num = 0;
+            $high_num = 0;
+            foreach ($list as $key => $value) {
+                $num ++;
+                unset($list[$key]['type']);
+                
+                $high = 0;
+                if ($value['price'] >= $value['aprice']) {
+                    $high = 1;
+                    $high_num ++;
+                }
+                $list[$key]['high'] = $high;
+                $list[$key]['hpre'] = round($high_num / $num * 100, 2);
             }
+
 
             // var_dump($list);
             
-            // shellPrint($listZ);
+            shellPrint($list);
         });
 
         Event::wait();
