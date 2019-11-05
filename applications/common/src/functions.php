@@ -14,7 +14,7 @@ function checkOpen()
     return $date_exists ? true : false;
 }
 
-function dates($limit=10)
+function dates($limit=10, $format='')
 {
     $connection=app()->dbPool->getConnection();
     $sql = "SELECT `date` FROM `hsab` WHERE `date`<>CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT $limit";
@@ -23,6 +23,11 @@ function dates($limit=10)
     $list = array_column($date_list, 'date');
     sort($list);
 
+    if ($format) {
+        foreach ($list as $key => $value) {
+            $list[$key] = date($format, strtotime($value));
+        }
+    }
     return $list;
 }
 
