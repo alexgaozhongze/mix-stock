@@ -34,10 +34,10 @@ class HqCommand
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
             $connection->createCommand($sql)->execute();
 
-            // while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
+            while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
                 self::handle();
-                usleep(888888);
-            // }
+                usleep(88888888);
+            }
         });
     }
 
@@ -45,7 +45,7 @@ class HqCommand
     {
         $connection=app()->dbPool->getConnection();
 
-        $hq_table = 'hq_' . date('Ymd');
+        $table_name = 'hq_' . date('Ymd');
         $sql = "SELECT `code`,`type` FROM `hsab` AS `a` WHERE `date`=CURDATE() AND `price` IS NOT NULL GROUP BY `code`";
         $codes = $connection->createCommand($sql)->queryAll();
 
@@ -63,14 +63,14 @@ class HqCommand
             ->withOptions([
                 'timeout' => 3
             ])
-            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $hq_table) {
+            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $table_name) {
                 $response_json = $ql->getHtml();
 
                 $item = json_decode($response_json, true);
                 $data = $item['data']['data'] ?? [];
                 $info = $item['data']['info'] ?? [];
 
-                $sql_fields = "INSERT INTO `$hq_table` (`code`, `price`, `aprice`, `num`, `time`, `type`) VALUES ";
+                $sql_fields = "INSERT INTO `$table_name` (`code`, `price`, `aprice`, `num`, `time`, `type`) VALUES ";
                 $sql_values = "";
     
                 $code = $item['data']['code'];

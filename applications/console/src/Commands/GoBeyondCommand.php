@@ -24,11 +24,11 @@ class GoBeyondCommand
     public function main()
     {
         xgo(function () {
-            while ((strtotime('09:30') <= time() && strtotime('15:15') >= time())) {
+            // while ((strtotime('09:30') <= time() && strtotime('15:15') >= time())) {
                 self::handle();
-                sleep(88);
-                echo PHP_EOL,PHP_EOL,PHP_EOL;
-            }
+                // sleep(88);
+                // echo PHP_EOL,PHP_EOL,PHP_EOL;
+            // }
         });
 
         Event::wait();
@@ -38,7 +38,8 @@ class GoBeyondCommand
     {
         $connection=app()->dbPool->getConnection();
 
-        $sql = "select code from hsab where date=curdate() order by up desc";
+        $sql = "SELECT `code` FROM `hsab` WHERE `date`=CURDATE() AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退' AND `price` IS NOT NULL";
+        $sql .= " AND up >= 9";
         $list = $connection->createCommand($sql)->queryAll();
         $code_list = array_column($list, 'code');
         $date_list = dates(5, 'Ymd');
@@ -94,6 +95,9 @@ class GoBeyondCommand
             }
             $pre = round($pre, 2);
             $result[] = $pre;
+            if (80 <= $pre && $pre_continuous) {
+                $max_pre_continuous ++;
+            }
 
             $sql = "select up from hsab where code=$code and date=curdate()";
             $info = $connection->createCommand($sql)->queryOne();
@@ -104,14 +108,34 @@ class GoBeyondCommand
         }
 
         foreach ($result_list as $value) {
-            if (3 <= $value[13]) {
+            // if (3 <= $value[13]) {
                 echo str_pad($value[0], 6, 0, STR_PAD_LEFT);
                 for ($i=1; $i<=12; $i++) {
                     echo str_pad($value[$i], 8, ' ', STR_PAD_LEFT);
                 }
-                echo str_pad($value[13], 6, ' ', STR_PAD_LEFT);
+                echo str_pad($value[13], 5, ' ', STR_PAD_LEFT);
+                if (80 <= $value[1] && 80 <= $value[3] && 80 <= $value[5]) {
+                    echo str_pad('+', 5, ' ', STR_PAD_LEFT);
+                } else {
+                    echo str_pad(' ', 5, ' ', STR_PAD_LEFT);
+                }
+                if (80 <= $value[3] && 80 <= $value[5] && 80 <= $value[7]) {
+                    echo str_pad('+', 5, ' ', STR_PAD_LEFT);
+                } else {
+                    echo str_pad(' ', 5, ' ', STR_PAD_LEFT);
+                }
+                if (80 <= $value[5] && 80 <= $value[7] && 80 <= $value[9]) {
+                    echo str_pad('+', 5, ' ', STR_PAD_LEFT);
+                } else {
+                    echo str_pad(' ', 5, ' ', STR_PAD_LEFT);
+                }
+                if (80 <= $value[7] && 80 <= $value[9] && 80 <= $value[11]) {
+                    echo str_pad('+', 5, ' ', STR_PAD_LEFT);
+                } else {
+                    echo str_pad(' ', 5, ' ', STR_PAD_LEFT);
+                }
                 echo PHP_EOL;
-            }
+            // }
         }
     }
 

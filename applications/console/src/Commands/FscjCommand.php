@@ -38,7 +38,7 @@ class FscjCommand
 
             while ((strtotime('09:30') <= time() && strtotime('11:30') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
                 self::handle();
-                usleep(888888);
+                usleep(88888888);
             }
         });
     }
