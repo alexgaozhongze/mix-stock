@@ -24,8 +24,7 @@ return [
         'hq' => ['Hq'],
         'hsab' => ['Hsab'],
         'fscj' => ['Fscj'],
-        'hqbj' => ['Hqbj'],
-        'pkyd' => ['Pkyd'],
+        'macd' => ['Macd'],
 
         'g' => [
             'GoBeyond',

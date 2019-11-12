@@ -6,11 +6,11 @@ use QL\QueryList;
 use GuzzleHttp\Psr7\Response;
 
 /**
- * Class HqCommand
+ * Class MacdCommand
  * @package Console\Commands
  * @author alex <alexgaozhongze@gmail.com>
  */
-class HqCommand
+class MacdCommand
 {
 
     /**
@@ -21,19 +21,6 @@ class HqCommand
         xgo(function () {
             if (!checkOpen()) return false;
             
-            $connection=app()->dbPool->getConnection();
-            $table_name = "hq_" . date('Ymd');
-            $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
-                `code` mediumint(6) unsigned zerofill NOT NULL,
-                `price` float(6,2) DEFAULT NULL,
-                `aprice` float(7,3) DEFAULT NULL,
-                `num` int(11) DEFAULT NULL,
-                `time` time NOT NULL,
-                `type` tinyint(4) NOT NULL,
-                PRIMARY KEY (`code`,`type`,`time`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-            $connection->createCommand($sql)->execute();
-
             while ((strtotime('09:30') <= time() && strtotime('11:35') >= time()) || (strtotime('13:00') <= time() && strtotime('15:15') >= time())) {
                 self::handle();
                 usleep(88888888);
@@ -55,7 +42,7 @@ class HqCommand
         $urls = [];
         array_walk($codes, function($item) use (&$urls, $timestamp) {
             $key = str_pad($item['code'], 6, "0", STR_PAD_LEFT) . $item['type'];
-            $urls[] = "http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?token=4f1862fc3b5e77c150a2b985b12db0fd&rtntype=5&id=$key&type=r&iscr=false&js={%22data%22:(x)}";
+            $urls[] = "http://pdfm.eastmoney.com/EM_UBG_PDTI_Fast/api/js?token=4f1862fc3b5e77c150a2b985b12db0fd&rtntype=6&id=$key&type=m5k&authorityType=&js={%22data%22:(x)}";
         });
 
         QueryList::multiGet($urls)
@@ -70,23 +57,22 @@ class HqCommand
                 $data = $item['data']['data'] ?? [];
                 $info = $item['data']['info'] ?? [];
 
-                $sql_fields = "INSERT INTO `$table_name` (`code`, `price`, `aprice`, `num`, `time`, `type`) VALUES ";
+                $sql_fields = "INSERT IGNORE INTO `macd` (`code`, `kp`, `sp`, `zg`, `zd`, `cjl`, `cje`, `zf`, `time`, `type`) VALUES ";
                 $sql_values = "";
     
                 $code = $item['data']['code'];
                 $type = $info['mk'];
     
                 array_walk($data, function($iitem) use (&$sql_values, $code, $type) {
-                    list($time, $price, $num, $aprice) = explode(',', $iitem);
+                    list($time, $kp, $sp, $zg, $zd, $cjl, $cje, $zf) = explode(',', $iitem);
+                    $zf = floatval($zf);
                     $sql_values && $sql_values .= ',';
-    
-                    $sql_values .= "($code, $price, $aprice, $num, '$time', $type)";
+
+                    $sql_values .= "($code, $kp, $sp, $zg, $zd, $cjl, $cje, $zf, '$time', $type)";
                 });
 
-                $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `aprice`=VALUES(`aprice`), `num`=VALUES(`num`);";
-    
                 if ($sql_values) {
-                    $sql = $sql_fields . $sql_values . $sql_duplicate;
+                    $sql = $sql_fields . $sql_values;
                     $connection->createCommand($sql)->execute();
                 }
             })->error(function (QueryList $ql, $reason, $index){

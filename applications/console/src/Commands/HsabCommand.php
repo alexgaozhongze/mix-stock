@@ -124,7 +124,7 @@ class HsabCommand
 
     private function goSync()
     {
-        if (strtotime('09:30') <= time() && strtotime('11:30') >= time()) return true;
+        if (strtotime('09:30') <= time() && strtotime('11:35') >= time()) return true;
         else if (strtotime('13:00') <= time() && strtotime('15:15') >= time()) return true;
     }
 
