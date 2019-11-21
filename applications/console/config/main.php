@@ -25,6 +25,7 @@ return [
         'hsab' => ['Hsab'],
         'fscj' => ['Fscj'],
         'macd' => ['Macd'],
+        'test' => ['Test'],
 
         'g' => [
             'GoBeyond',
