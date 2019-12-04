@@ -4,6 +4,7 @@ namespace Console\Commands;
 
 use QL\QueryList;
 use GuzzleHttp\Psr7\Response;
+use Mix\Console\CommandLine\Flag;
 
 /**
  * Class class MacdSyncCommand
@@ -20,16 +21,18 @@ class MacdSyncCommand
     public function main()
     {
         xgo(function () {
+            $code = Flag::string('code');
+
             $connection=app()->dbPool->getConnection();
-            $sql = "SELECT `code` FROM `macd` GROUP BY `code`";
+            $sql = "SELECT `code` FROM `macd`";
+            $code && $sql .= " WHERE `code`=$code";
+            $sql .= " GROUP BY `code`";
             $code_list = $connection->createCommand($sql)->queryAll();
 
-            $code_list = [
-                '2967'
-            ];
+            $code_list = array_column($code_list, 'code');
 
             foreach ($code_list as $value) {
-                $sql = "SELECT `sp`,`time` FROM `macd` WHERE `code`=$value AND RIGHT(`time`,4) IN ('0:00','5:00')";
+                $sql = "SELECT `sp`,`time` FROM `macd` WHERE `code`=$value";
                 $list = $connection->createCommand($sql)->queryAll();
 
                 $pre_l_value = [];
@@ -58,7 +61,11 @@ class MacdSyncCommand
                     $l_value['ema12'] = round($ema12, 3);
                     $l_value['ema26'] = round($ema26, 3);
                 
-var_export($l_value);
+                    $sql = "UPDATE `macd` SET `dif`=$l_value[dif], `dea`=$l_value[dea], `macd`=$l_value[macd], `ema12`=$l_value[ema12], `ema26`=$l_value[ema26] WHERE `code`=$value AND `time`='$l_value[time]'";
+                    
+                    $connection->createCommand($sql)->execute();
+
+                    echo $sql,PHP_EOL;
 
                     $pre_l_value = $l_value;
                 }

@@ -3,7 +3,6 @@
 namespace Console\Commands;
 
 use Mix\Console\CommandLine\Flag;
-use Mix\Core\Coroutine\Channel;
 
 /**
  * Class HelloCommand
