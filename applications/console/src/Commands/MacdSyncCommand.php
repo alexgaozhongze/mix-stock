@@ -2,8 +2,6 @@
 
 namespace Console\Commands;
 
-use QL\QueryList;
-use GuzzleHttp\Psr7\Response;
 use Mix\Console\CommandLine\Flag;
 
 /**
@@ -67,10 +65,7 @@ class MacdSyncCommand
                     $l_value['ema26'] = round($ema26, 3);
                 
                     $sql = "UPDATE `macd` SET `dif`=$l_value[dif], `dea`=$l_value[dea], `macd`=$l_value[macd], `ema12`=$l_value[ema12], `ema26`=$l_value[ema26] WHERE `code`=$value AND `time`='$l_value[time]'";
-                    
                     $connection->createCommand($sql)->execute();
-
-                    echo $sql,PHP_EOL;
 
                     $pre_l_value = $l_value;
                 }
