@@ -24,11 +24,20 @@ class GoBeyondCommand
     public function main()
     {
         xgo(function () {
+            $dates = dates(30);
+            $start_date = reset($dates);
+
             $connection=app()->dbPool->getConnection();
-            $sql = "SELECT * FROM `macd` WHERE `dif`>=`dea` AND `dif`>0 AND `dea`>0 AND DATE_FORMAT(`time`, \"%H:%i:%s\")='15:00:00' AND DATE_FORMAT(`time`, \"%Y:%b:%c\")='2019-12-01'";
+            // `dif`>=`dea` AND `dea`>=`macd` AND `macd`>=1
+            $sql = "SELECT `code`,`type`,MIN(`zd`) AS `zd` FROM `macd` WHERE `time`>='$start_date' GROUP BY `code`";
             $code_list = $connection->createCommand($sql)->queryAll();
 
-            shellPrint($code_list);
+            foreach ($code_list as $value) {
+                $sql = "SELECT * FROM `macd` WHERE `code`=$value[code] AND `type`=$value[type] AND `time`>='$start_date' AND `zd`=$value[zd] ORDER BY `time` DESC";
+                $info = $connection->createCommand($sql)->queryOne();
+    
+                var_export($info);
+            }
         });
 
         Event::wait();
