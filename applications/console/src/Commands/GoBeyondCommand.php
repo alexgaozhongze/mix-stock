@@ -33,10 +33,19 @@ class GoBeyondCommand
             $code_list = $connection->createCommand($sql)->queryAll();
 
             foreach ($code_list as $value) {
-                $sql = "SELECT * FROM `macd` WHERE `code`=$value[code] AND `type`=$value[type] AND `time`>='$start_date' AND `zd`=$value[zd] ORDER BY `time` DESC";
+                $sql = "SELECT `code`,`type`,`time` FROM `macd` WHERE `code`=$value[code] AND `type`=$value[type] AND `time`>='$start_date' AND `zd`=$value[zd] ORDER BY `time` DESC";
                 $info = $connection->createCommand($sql)->queryOne();
+
+                if (strtotime($info['time']) >= strtotime('2019-12-01')) {
+                    var_export($info);
+                }
     
-                var_export($info);
+                // $next_time = date('Y-m-d H:i:s', strtotime($info['time'] . '+1 days'));
+                // $sql = "SELECT * FROM `macd` WHERE `code`=$info[code] AND `type`=$info[type] AND `time`>='$info[time]' AND `time`<='$next_time' AND `dif`>=`dea` AND `dif`>=0.1";
+                // $info_up = $connection->createCommand($sql)->queryOne();
+
+                // var_export($info_up);
+
             }
         });
 
