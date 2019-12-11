@@ -24,29 +24,14 @@ class GoBeyondCommand
     public function main()
     {
         xgo(function () {
-            $dates = dates(30);
-            $start_date = reset($dates);
-
             $connection=app()->dbPool->getConnection();
-            // `dif`>=`dea` AND `dea`>=`macd` AND `macd`>=1
-            $sql = "SELECT `code`,`type`,MIN(`zd`) AS `zd` FROM `macd` WHERE `time`>='$start_date' GROUP BY `code`";
-            $code_list = $connection->createCommand($sql)->queryAll();
+            $code = 2351;
 
-            foreach ($code_list as $value) {
-                $sql = "SELECT `code`,`type`,`time` FROM `macd` WHERE `code`=$value[code] AND `type`=$value[type] AND `time`>='$start_date' AND `zd`=$value[zd] ORDER BY `time` DESC";
-                $info = $connection->createCommand($sql)->queryOne();
+            $sql = "SELECT `dif`,`dea`,`macd` FROM `macd` WHERE `code`=$code";
+            $list = $connection->createCommand($sql)->queryAll();
 
-                if (strtotime($info['time']) >= strtotime('2019-12-01')) {
-                    var_export($info);
-                }
-    
-                // $next_time = date('Y-m-d H:i:s', strtotime($info['time'] . '+1 days'));
-                // $sql = "SELECT * FROM `macd` WHERE `code`=$info[code] AND `type`=$info[type] AND `time`>='$info[time]' AND `time`<='$next_time' AND `dif`>=`dea` AND `dif`>=0.1";
-                // $info_up = $connection->createCommand($sql)->queryOne();
+            shellPrint($list);
 
-                // var_export($info_up);
-
-            }
         });
 
         Event::wait();
