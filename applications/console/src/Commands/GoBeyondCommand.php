@@ -16,7 +16,7 @@ class GoBeyondCommand
      * 退出
      * @var bool
      */
-    public $quit = false;
+    private $connection;
 
     /**
      * 主函数
@@ -25,10 +25,15 @@ class GoBeyondCommand
     {
         xgo(function () {
             $connection=app()->dbPool->getConnection();
-            $code = 2351;
+            
+            $code = 2962;
 
-            $sql = "SELECT `dif`,`dea`,`macd` FROM `macd` WHERE `code`=$code";
-            $list = $connection->createCommand($sql)->queryAll();
+            $sql = "SELECT `dif`,`dea`,`macd`,`time` FROM `macd` WHERE `code`=$code";
+            $list =$connection->createCommand($sql)->queryAll();
+
+            
+
+
 
             shellPrint($list);
 
