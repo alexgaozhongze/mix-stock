@@ -31,12 +31,35 @@ class GoBeyondCommand
             $sql = "SELECT `dif`,`dea`,`macd`,`time` FROM `macd` WHERE `code`=$code";
             $list =$connection->createCommand($sql)->queryAll();
 
-            
+            $date_pre_price = [];
+
+            foreach ($list as $value) {
+                $date = date('Ymd', strtotime($value['time']));
+                if (!isset($date_pre_price[$date])) {
+                    $date_pre_price[$date] = [
+                        'pre' => $value,
+                        'cross' => []
+                    ];
+                } else {
+                    $pre_value = $date_pre_price[$date]['pre'];
+                    $cross = $date_pre_price[$date]['cross'];
+                    
+                    if ($cross) {
+
+                    } else {
+                        if ($value['dif'] >= 0.99 * $value['dea'] && $value['dif'] <= 1.01 * $value['dea']) {
+                            $date_pre_price[$date]['cross'] = $value;
+                        }
+                    }
+
+                    $date_pre_price[$date]['pre'] = $value;
+                }
+
+            }
 
 
 
-            shellPrint($list);
-
+            // shellPrint($list);
         });
 
         Event::wait();

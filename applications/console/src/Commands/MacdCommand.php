@@ -66,9 +66,11 @@ class MacdCommand
                 array_walk($data, function($iitem) use (&$sql_values, $code, $type) {
                     list($time, $kp, $sp, $zg, $zd, $cjl, $cje, $zf) = explode(',', $iitem);
                     $zf = floatval($zf);
-                    $sql_values && $sql_values .= ',';
 
-                    $sql_values .= "($code, $kp, $sp, $zg, $zd, $cjl, $cje, $zf, '$time', $type)";
+                    if (in_array(substr($time, -1), ['0','5'])) {
+                        $sql_values && $sql_values .= ',';
+                        $sql_values .= "($code, $kp, $sp, $zg, $zd, $cjl, $cje, $zf, '$time', $type)";
+                    }
                 });
 
                 if ($sql_values) {
