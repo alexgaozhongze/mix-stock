@@ -64,10 +64,7 @@ class HsabCommand
             $pages = $data['data']['total'] ?? 0;
             if (!$datas) return false;
 
-            while (self::goSync()) {
-                self::handle($pages);
-                usleep(88888888);
-            }
+            self::handle($pages);
         });
     }
 

@@ -21,10 +21,7 @@ class MacdCommand
         xgo(function () {
             if (!checkOpen()) return false;
             
-            while ((strtotime('09:30') <= time() && strtotime('11:35') >= time()) || (strtotime('13:00') <= time() && strtotime('16:00') >= time())) {
-                self::handle();
-                usleep(88888888);
-            }
+            self::handle();
         });
     }
 
