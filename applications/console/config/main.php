@@ -33,7 +33,7 @@ return [
             'description' => "\tGoBeyond handle.",
             'options'     => [
                 [['hde', 'handle'], 'description' => 'handle'],
-                ['say', 'description' => "\tSay ..."],
+                ['code'],
             ],
         ],
 

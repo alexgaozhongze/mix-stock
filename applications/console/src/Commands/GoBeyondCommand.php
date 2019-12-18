@@ -2,6 +2,7 @@
 
 namespace Console\Commands;
 
+use Mix\Console\CommandLine\Flag;
 use Mix\Core\Event;
 
 /**
@@ -25,11 +26,20 @@ class GoBeyondCommand
     {
         xgo(function () {
             $connection=app()->dbPool->getConnection();
+
+            $sql = "SELECT `code` FROM hsab WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
+            $code_list = $connection->createCommand($sql)->queryAll();
+            $count = count($code_list);
+            $rand = rand(0, $count-1);
             
-            $code = 2962;
+            $rand_code = $code_list[$rand]['code'];
+            $code = $rand_code;
+            $code  = Flag::string('code', $rand_code);
+
+            echo $code, PHP_EOL;
 
             $sql = "SELECT `dif`,`dea`,`macd`,`time` FROM `macd` WHERE `code`=$code";
-            $list =$connection->createCommand($sql)->queryAll();
+            $list = $connection->createCommand($sql)->queryAll();
 
             $date_pre_price = [];
 
@@ -45,21 +55,23 @@ class GoBeyondCommand
                     $cross = $date_pre_price[$date]['cross'];
                     
                     if ($cross) {
-
+                        if ($value['dea'] >= 0.99 * $pre_value['dea']) {
+                            $date_pre_price[$date]['cross'][] = $value;
+                        } else {
+                            $date_pre_price[$date]['cross'] = [];
+                        }
                     } else {
                         if ($value['dif'] >= 0.99 * $value['dea'] && $value['dif'] <= 1.01 * $value['dea']) {
-                            $date_pre_price[$date]['cross'] = $value;
+                            $date_pre_price[$date]['cross'][] = $value;
                         }
                     }
 
                     $date_pre_price[$date]['pre'] = $value;
                 }
-
             }
 
-
-
-            // shellPrint($list);
+            var_dump($date_pre_price);
+            echo $code;
         });
 
         Event::wait();
