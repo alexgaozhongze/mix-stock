@@ -54,19 +54,54 @@ class MacdCommand
                 $data = $item['data']['data'] ?? [];
                 $info = $item['data']['info'] ?? [];
 
-                $sql_fields = "INSERT IGNORE INTO `macd` (`code`, `kp`, `sp`, `zg`, `zd`, `cjl`, `cje`, `zf`, `time`, `type`) VALUES ";
+                $sql_fields = "INSERT IGNORE INTO `macd` (`code`, `kp`, `sp`, `zg`, `zd`, `cjl`, `cje`, `zf`, `time`, `type`, `dif`, `dea`, `macd`, `ema12`, `ema26`) VALUES ";
                 $sql_values = "";
     
                 $code = $item['data']['code'];
                 $type = $info['mk'];
-    
-                array_walk($data, function($iitem) use (&$sql_values, $code, $type) {
+
+                $pre_l_value = [];
+                array_walk($data, function($iitem) use (&$sql_values, &$pre_l_value, $code, $type, $connection) {
                     list($time, $kp, $sp, $zg, $zd, $cjl, $cje, $zf) = explode(',', $iitem);
                     $zf = floatval($zf);
 
-                    if (in_array(substr($time, -1), ['0','5'])) {
+                    if (date('Y-m-d') == date('Y-m-d', strtotime($time)) && in_array(substr($time, -1), ['0','5']) && '09:30' != substr($time, 11, 5)) {
                         $sql_values && $sql_values .= ',';
-                        $sql_values .= "($code, $kp, $sp, $zg, $zd, $cjl, $cje, $zf, '$time', $type)";
+
+                        if ($pre_l_value) {
+                            $pre_ema12 = $pre_l_value['ema12'];
+                            $pre_ema26 = $pre_l_value['ema26'];
+                            $pre_dea = $pre_l_value['dea'];
+                        } else {
+                            $sql = "SELECT `ema12`,`ema26`,`dea` FROM `macd` WHERE `code`=$code AND `type`=$type AND `time`<'$time' ORDER BY `time` DESC";
+                            $info = $connection->createCommand($sql)->queryOne();
+
+                            if ($info) {
+                                $pre_ema12 = $info['ema12'];
+                                $pre_ema26 = $info['ema26'];
+                                $pre_dea = $info['dea'];
+                            } else {
+                                $pre_ema12 = $pre_ema26 = $sp;
+                                $pre_dea = 0;
+                            }
+                        }
+
+                        $ema12 = 2 / (12 + 1) * $sp + (12 - 1) / (12 + 1) * $pre_ema12;
+                        $ema26 = 2 / (26 + 1) * $sp + (26 - 1) / (26 + 1) * $pre_ema26;
+    
+                        $dif = $ema12 - $ema26;
+                        $dea = 2 / (9 + 1) * $dif + (9 - 1) / (9 + 1) * $pre_dea;
+                        $macd = 2 * ($dif - $dea);
+    
+                        $l_value['dif'] = round($dif, 3);
+                        $l_value['dea'] = round($dea, 3);
+                        $l_value['macd'] = round($macd, 3);
+                        $l_value['ema12'] = round($ema12, 3);
+                        $l_value['ema26'] = round($ema26, 3);
+
+                        $pre_l_value = $l_value;
+
+                        $sql_values .= "($code, $kp, $sp, $zg, $zd, $cjl, $cje, $zf, '$time', $type, $l_value[dif], $l_value[dea], $l_value[macd], $l_value[ema12], $l_value[ema26])";
                     }
                 });
 
