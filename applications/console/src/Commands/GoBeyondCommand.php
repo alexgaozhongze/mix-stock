@@ -55,7 +55,7 @@ class GoBeyondCommand
                     $cross = $date_pre_price[$date]['cross'];
                     
                     if ($cross) {
-                        if ($value['dea'] >= 0.99 * $pre_value['dea']) {
+                        if ($value['dif'] >= 0.99 * $pre_value['dif'] && $value['dea'] >= $pre_value['dea']) {
                             $date_pre_price[$date]['cross'][] = $value;
                         } else {
                             $date_pre_price[$date]['cross'] = [];
