@@ -42,6 +42,7 @@ class GoBeyondCommand
             $list = $connection->createCommand($sql)->queryAll();
 
             $date_pre_price = [];
+            $cross_continue_down = 0;
 
             foreach ($list as $value) {
                 $date = date('Ymd', strtotime($value['time']));
@@ -55,13 +56,19 @@ class GoBeyondCommand
                     $cross = $date_pre_price[$date]['cross'];
                     
                     if ($cross) {
-                        if ($value['dif'] >= 0.99 * $pre_value['dif'] && $value['dea'] >= $pre_value['dea']) {
+                        if (round($value['dif'], 2) >= round($pre_value['dif'], 2) && round($value['dea'], 2) >= round($pre_value['dea'], 2) && $cross_continue_down <= 5) {
                             $date_pre_price[$date]['cross'][] = $value;
+                            if ($value['dif'] <= $pre_value['dif'] || $value['dea'] <= $pre_value['dea']) {
+                                $cross_continue_down++;
+                            } else {
+                                $cross_continue_down = 0;
+                            }
                         } else {
                             $date_pre_price[$date]['cross'] = [];
+                            $cross_continue_down = 0;
                         }
                     } else {
-                        if ($value['dif'] >= 0.99 * $value['dea'] && $value['dif'] <= 1.01 * $value['dea']) {
+                        if ($value['dif'] <= $value['dea'] + 0.001 && $value['dif'] >= $value['dea'] - 0.001) {
                             $date_pre_price[$date]['cross'][] = $value;
                         }
                     }
@@ -71,7 +78,7 @@ class GoBeyondCommand
             }
 
             var_dump($date_pre_price);
-            echo $code;
+            echo $code,PHP_EOL;
         });
 
         Event::wait();
