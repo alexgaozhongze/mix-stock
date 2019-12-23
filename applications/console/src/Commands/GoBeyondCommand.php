@@ -41,43 +41,44 @@ class GoBeyondCommand
             $sql = "SELECT `dif`,`dea`,`macd`,`time` FROM `macd` WHERE `code`=$code";
             $list = $connection->createCommand($sql)->queryAll();
 
-            $date_pre_price = [];
-            $cross_continue_down = 0;
+            $date_cross = [];
 
             foreach ($list as $value) {
                 $date = date('Ymd', strtotime($value['time']));
-                if (!isset($date_pre_price[$date])) {
-                    $date_pre_price[$date] = [
-                        'pre' => $value,
-                        'cross' => []
+                if (!isset($date_cross[$date])) {
+                    $date_cross[$date] = [
+                        'cross' => [],
+                        'cross_dif_avg' => 0,
+                        'cross_dea_avg' => 0
                     ];
                 } else {
-                    $pre_value = $date_pre_price[$date]['pre'];
-                    $cross = $date_pre_price[$date]['cross'];
+                    $cross = $date_cross[$date]['cross'];
                     
                     if ($cross) {
-                        if (round($value['dif'], 2) >= round($pre_value['dif'], 2) && round($value['dea'], 2) >= round($pre_value['dea'], 2) && $cross_continue_down <= 5) {
-                            $date_pre_price[$date]['cross'][] = $value;
-                            if ($value['dif'] <= $pre_value['dif'] || $value['dea'] <= $pre_value['dea']) {
-                                $cross_continue_down++;
-                            } else {
-                                $cross_continue_down = 0;
-                            }
+                        if ($value['dif'] >= $date_cross[$date]['cross_dif_avg'] && $value['dea'] >= $date_cross[$date]['cross_dea_avg']) {
+                            $date_cross[$date]['cross'][] = $value;
+                            $date_cross[$date]['cross_dif_avg'] = round(($date_cross[$date]['cross_dif_avg'] + $value['dif']) / 2, 3);
+                            $date_cross[$date]['cross_dea_avg'] = round(($date_cross[$date]['cross_dea_avg'] + $value['dea']) / 2, 3);
                         } else {
-                            $date_pre_price[$date]['cross'] = [];
-                            $cross_continue_down = 0;
+                            $date_cross[$date] = [
+                                'cross' => [],
+                                'cross_dif_avg' => 0,
+                                'cross_dea_avg' => 0,
+                            ];
                         }
                     } else {
                         if ($value['dif'] <= $value['dea'] + 0.001 && $value['dif'] >= $value['dea'] - 0.001) {
-                            $date_pre_price[$date]['cross'][] = $value;
+                            $date_cross[$date]['cross'][] = $value;
+                            $date_cross[$date]['cross_dif_avg'] = $value['dif'];
+                            $date_cross[$date]['cross_dea_avg'] = $value['dea'];
                         }
                     }
 
-                    $date_pre_price[$date]['pre'] = $value;
+                    $date_cross[$date]['pre'] = $value;
                 }
             }
 
-            var_dump($date_pre_price);
+            var_export($date_cross);
             echo $code,PHP_EOL;
         });
 
