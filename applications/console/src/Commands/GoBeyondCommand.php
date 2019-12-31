@@ -95,20 +95,23 @@ class GoBeyondCommand
     {
         $connection=app()->dbPool->getConnection();
 
-        $date = '2019-12-26';
-        $sql = "SELECT * FROM `macd` WHERE (`time`='$date 14:15:00' AND `dif`<=`dea`) OR (`time`='$date 14:45:00' AND `dif`>=`dea`)";
-        $code_dif_list = $connection->createCommand($sql)->queryAll();
+        $date = date('Y-m-d');
+        $date = '2019-12-30';
+        $sql = "SELECT * FROM `macd` WHERE (`time`='$date 14:15:00' AND `ema5`<=`ema60` AND `ema10`<=`ema60` AND `ema20`<=`ema60` AND `dif`<=0 AND `dea`<=0) OR (`time`='$date 14:45:00' AND `ema5`>=`ema60` AND `ema10`>=`ema60` AND `ema20`>=`ema60` AND `dif`>=0 AND `dea`>=0)";
+        $code_ema_list = $connection->createCommand($sql)->queryAll();
 
-var_export($code_dif_list);die;
+        $code_exists = [];
+        foreach ($code_ema_list as $value) {
+            $code_exists[$value['code']]['exists'] = isset($code_exists[$value['code']]) ? 2 : 1;
+            $code_exists[$value['code']]['sp'] = $value['sp'];
+        }
 
-        $dates = dates(3);
-        $start_date = reset($dates);
-
-        foreach ($code_dif_list as $value) {
-            $dif = round($value['min_dif'] * 0.9, 3);
-            $sql = "SELECT `code`,`time` FROM `macd` WHERE `code`=$value[code] AND `time`>='$start_date' AND `dif`<=$dif";
-            $list = $connection->createCommand($sql)->queryAll();
-            var_export($list);
+        foreach ($code_exists as $key => $value) {
+            if (2 <= $value['exists']) {
+                $sql = "SELECT * FROM `macd` WHERE `code`=$key AND `time`='2019-12-31 09:35:00'";
+                $info = $connection->createCommand($sql)->queryOne();
+                echo $key, ' ', $value['sp'], ' ', $info['sp'], PHP_EOL;
+            }
         }
 
     }
