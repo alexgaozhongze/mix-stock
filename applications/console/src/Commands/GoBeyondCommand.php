@@ -96,8 +96,8 @@ class GoBeyondCommand
         $connection=app()->dbPool->getConnection();
 
         $date = date('Y-m-d');
-        $date = '2019-12-30';
-        $sql = "SELECT * FROM `macd` WHERE (`time`='$date 14:15:00' AND `ema5`<=`ema60` AND `ema10`<=`ema60` AND `ema20`<=`ema60` AND `dif`<=0 AND `dea`<=0) OR (`time`='$date 14:45:00' AND `ema5`>=`ema60` AND `ema10`>=`ema60` AND `ema20`>=`ema60` AND `dif`>=0 AND `dea`>=0)";
+        // $date = '2019-12-27';
+        $sql = "SELECT * FROM `macd` WHERE (`time`='$date 14:15:00' AND `ema5`<`ema60` AND `ema10`<`ema60` AND `ema20`<`ema60` AND `dif`<0 AND `dea`<0) OR (`time`='$date 14:45:00' AND `ema5`>`ema60` AND `ema10`>`ema60` AND `ema20`>`ema60` AND `dif`>0 AND `dea`>0)";
         $code_ema_list = $connection->createCommand($sql)->queryAll();
 
         $code_exists = [];
@@ -108,7 +108,7 @@ class GoBeyondCommand
 
         foreach ($code_exists as $key => $value) {
             if (2 <= $value['exists']) {
-                $sql = "SELECT * FROM `macd` WHERE `code`=$key AND `time`='2019-12-31 09:35:00'";
+                $sql = "SELECT * FROM `macd` WHERE `code`=$key AND `time`='2019-12-30 09:35:00'";
                 $info = $connection->createCommand($sql)->queryOne();
                 echo $key, ' ', $value['sp'], ' ', $info['sp'], PHP_EOL;
             }
