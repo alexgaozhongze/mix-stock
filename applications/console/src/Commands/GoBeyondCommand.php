@@ -26,7 +26,8 @@ class GoBeyondCommand
     {
         xgo(function () {
             // $this->one();
-            $this->two();
+            // $this->two();
+            $this->three();
         });
 
         Event::wait();
@@ -111,6 +112,33 @@ class GoBeyondCommand
                 $sql = "SELECT * FROM `macd` WHERE `code`=$key AND `time`='2019-12-30 09:35:00'";
                 $info = $connection->createCommand($sql)->queryOne();
                 echo $key, ' ', $value['sp'], ' ', $info['sp'], PHP_EOL;
+            }
+        }
+
+    }
+
+    private function three()
+    {
+        $connection=app()->dbPool->getConnection();
+
+        $sql = "SELECT * FROM `macd` WHERE `time`>=CURDATE()";
+        $list = $connection->createCommand($sql)->queryAll();
+
+        for ($i = 5; $i < count($list) - 7; $i ++) {
+            if (($list[$i]['code'] == $list[$i + 1]['code'] && $list[$i]['code'] == $list[$i + 2]['code'])
+            && ($list[$i]['sp'] > $list[$i]['kp'] && $list[$i]['ema5'] >= $list[$i]['ema10'] && $list[$i]['ema10'] >= $list[$i]['ema20'] && $list[$i]['ema20'] >= $list[$i]['ema60'])
+            && ($list[$i + 1]['sp'] > $list[$i + 1]['kp'] && $list[$i + 1]['ema5'] >= $list[$i + 1]['ema10'] && $list[$i + 1]['ema10'] >= $list[$i + 1]['ema20'] && $list[$i + 1]['ema20'] >= $list[$i + 1]['ema60'])
+            && ($list[$i + 2]['sp'] > $list[$i + 2]['kp'] && $list[$i + 2]['ema5'] >= $list[$i + 2]['ema10'] && $list[$i + 2]['ema10'] >= $list[$i + 2]['ema20'] && $list[$i + 2]['ema20'] >= $list[$i + 2]['ema60'])
+            && ($list[$i]['code'] == $list[$i - 1]['code'] && $list[$i]['code'] == $list[$i - 2]['code'] && $list[$i]['code'] == $list[$i - 3]['code'] && $list[$i]['code'] == $list[$i - 4]['code'] && $list[$i]['code'] == $list[$i - 5]['code'])
+            && ($list[$i - 1]['ema5'] <= $list[$i - 1]['ema60'] || $list[$i - 2]['ema5'] <= $list[$i - 2]['ema60'] || $list[$i - 3]['ema5'] <= $list[$i - 3]['ema60'] || $list[$i - 4]['ema5'] <= $list[$i - 4]['ema60'] || $list[$i - 5]['ema5'] <= $list[$i - 5]['ema60'])
+            && ($list[$i]['code'] == $list[$i + 3]['code'] && $list[$i]['code'] == $list[$i + 4]['code'] && $list[$i]['code'] == $list[$i + 5]['code'] && $list[$i]['code'] == $list[$i + 6]['code'] && $list[$i]['code'] == $list[$i + 7]['code'])
+            && ($list[$i + 3]['ema5'] > $list[$i + 2]['ema5'] && $list[$i + 3]['ema10'] > $list[$i + 2]['ema10'] && $list[$i + 3]['ema20'] > $list[$i + 2]['ema20'] && $list[$i + 3]['ema60'] > $list[$i + 2]['ema60'])
+            && ($list[$i + 4]['ema5'] > $list[$i + 3]['ema5'] && $list[$i + 4]['ema10'] > $list[$i + 3]['ema10'] && $list[$i + 4]['ema20'] > $list[$i + 3]['ema20'] && $list[$i + 4]['ema60'] > $list[$i + 3]['ema60'])
+            && ($list[$i + 5]['ema5'] > $list[$i + 4]['ema5'] && $list[$i + 5]['ema10'] > $list[$i + 4]['ema10'] && $list[$i + 5]['ema20'] > $list[$i + 4]['ema20'] && $list[$i + 5]['ema60'] > $list[$i + 4]['ema60'])
+            && ($list[$i + 6]['ema5'] > $list[$i + 5]['ema5'] && $list[$i + 6]['ema10'] > $list[$i + 5]['ema10'] && $list[$i + 6]['ema20'] > $list[$i + 5]['ema20'] && $list[$i + 6]['ema60'] > $list[$i + 5]['ema60'])
+            && ($list[$i + 7]['ema5'] > $list[$i + 6]['ema5'] && $list[$i + 7]['ema10'] > $list[$i + 6]['ema10'] && $list[$i + 7]['ema20'] > $list[$i + 6]['ema20'] && $list[$i + 7]['ema60'] > $list[$i + 6]['ema60'])
+            ) {
+                echo $list[$i]['code'], '   ', $list[$i]['time'], PHP_EOL;
             }
         }
 
