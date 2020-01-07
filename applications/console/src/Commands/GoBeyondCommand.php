@@ -181,7 +181,7 @@ class GoBeyondCommand
         $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='2020-01-06' AND `up`>=9.9";
         $list = $connection->createCommand($sql)->queryAll();
         
-        exec("google-chrome --new-window");
+        exec("google-chrome --new-window http://quote.eastmoney.com/center/");
         foreach ($list as $value) {
             $type = 1 == $value['type'] ? 'sh' : 'sz';
             $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
