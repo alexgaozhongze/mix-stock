@@ -27,7 +27,9 @@ class GoBeyondCommand
         xgo(function () {
             // $this->one();
             // $this->two();
-            $this->three();
+            // $this->three();
+            // $this->four();
+            $this->five();
         });
 
         Event::wait();
@@ -142,6 +144,53 @@ class GoBeyondCommand
             }
         }
 
+    }
+
+    // ma5超过1天以上大于ma60 -> ma5低于1.5小时小于ma60 1天48 1.5小时18
+    private function four()
+    {
+        $connection=app()->dbPool->getConnection();
+        $start_date = '2019-12-25';
+ 
+        $sql = "SELECT `code`,`ema5`,`ema20` FROM `macd` WHERE `time`>='$start_date'";
+        $list = $connection->createCommand($sql)->queryAll();
+        
+        $pre_code = $day_continue = $hour_continue = 0;
+        foreach ($list as $value) {
+            if ($pre_code == $value['code']) {
+                if ($value['ema5'] >= $value['ema20']) {
+                    $day_continue ++;
+                } else {
+                    if (12 >= $hour_continue) {
+
+                    } else {
+                        $day_continue = 0;
+                    }
+                }
+            } else {
+                $pre_code = $day_continue = $hour_continue = 0;
+            }
+        }
+
+    }
+
+    private function five()
+    {
+        $connection=app()->dbPool->getConnection();
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='2020-01-06' AND `up`>=9.9";
+        $list = $connection->createCommand($sql)->queryAll();
+        
+        exec("google-chrome --new-window");
+        foreach ($list as $value) {
+            $type = 1 == $value['type'] ? 'sh' : 'sz';
+            $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+            $url = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
+            exec("google-chrome $url");
+            sleep(5);
+        }
+
+        // var_export($list);
     }
 
 }
