@@ -177,8 +177,16 @@ class GoBeyondCommand
     private function five()
     {
         $connection=app()->dbPool->getConnection();
+        $dates = dates(30);
+        $start_date = reset($dates);
 
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='2020-01-06' AND `up`>=9.9";
+        $sql = "SELECT `code`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
+        $list = $connection->createCommand($sql)->queryAll();
+
+        $code_in = implode(',', array_column($list, 'code'));
+        end($dates) && $end_time = prev($dates);
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='$end_time' AND `up`>=9.9 ORDER BY FIELD(`code`, $code_in)";
         $list = $connection->createCommand($sql)->queryAll();
         
         exec("google-chrome --new-window http://quote.eastmoney.com/center/");
@@ -189,8 +197,6 @@ class GoBeyondCommand
             exec("google-chrome $url");
             sleep(5);
         }
-
-        // var_export($list);
     }
 
 }
