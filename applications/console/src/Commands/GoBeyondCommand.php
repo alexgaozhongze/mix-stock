@@ -177,26 +177,38 @@ class GoBeyondCommand
     private function five()
     {
         $connection=app()->dbPool->getConnection();
+        $redis = app()->redisPool->getConnection();
+
         $dates = dates(30);
         $start_date = reset($dates);
 
         $sql = "SELECT `code`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
         $list = $connection->createCommand($sql)->queryAll();
 
-        $code_in = implode(',', array_column($list, 'code'));
-        end($dates) && $end_time = prev($dates);
+        $sort_code = implode(',', array_column($list, 'code'));
+        $upstop_start_date = $dates[23];
+        $upstop_end_date = $dates[29];
 
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='$end_time' AND `up`>=9.9 ORDER BY FIELD(`code`, $code_in)";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`>='$upstop_start_date' AND `date`<='$upstop_end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
         $list = $connection->createCommand($sql)->queryAll();
-        
-        exec("google-chrome --new-window http://quote.eastmoney.com/center/");
-        foreach ($list as $value) {
-            $type = 1 == $value['type'] ? 'sh' : 'sz';
-            $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
-            $url = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
-            exec("google-chrome $url");
-            sleep(5);
+
+        $count = count($list);
+        $step = 5;
+
+        $index = $redis->get('index');
+        (!$index || $index >= $count - $step) && $redis->setex('index', 3600, 0) && $index = 0;
+        $index_end = $index + $step;
+
+        foreach ($list as $key => $value) {
+            if ($key >= $index && $key < $index_end) {
+                $type = 1 == $value['type'] ? 'sh' : 'sz';
+                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+                $url = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
+                exec("google-chrome $url");
+            }
         }
+
+        $redis->setex('index', 3600, $index_end);
     }
 
 }
