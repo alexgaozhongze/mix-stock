@@ -31,6 +31,23 @@ function dates($limit=10, $format='')
     return $list;
 }
 
+function datesHttp($limit=10, $format='')
+{
+    $connection=app()->db;
+    $sql = "SELECT `date` FROM `hsab` WHERE `date`<>CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT $limit";
+    $date_list = $connection->createCommand($sql)->queryAll();
+
+    $list = array_column($date_list, 'date');
+    sort($list);
+
+    if ($format) {
+        foreach ($list as $key => $value) {
+            $list[$key] = date($format, strtotime($value));
+        }
+    }
+    return $list;
+}
+
 function shellPrint($datas)
 {
     if (!$datas) {

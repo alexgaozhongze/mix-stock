@@ -27,45 +27,44 @@ class IndexController
     public function actionIndex(HttpRequestInterface $request, HttpResponseInterface $response)
     {
         $connection=app()->db;
-        $dates = GoBeyond::dates(1);
-        $pre_date = reset($dates);
-        $fscj_table = 'fscj_' . date('Ymd');
+        $redis = app()->redis;
 
-        $sql = "select *,round(cjs/avg_cjs, 2) pre from (
-                    select a.code,a.type,round(avg(a.cjs),0) avg_cjs,b.up,round(avg(d.up), 2) avg_up,b.cjs,b.price,max(d.up) as max_up from hsab a
-                    left join hsab b on a.code=b.code and a.type=b.type and b.date=curdate()
-                    left join $fscj_table d on a.code=d.code and a.type=d.type
-                    where a.date<>curdate() 
-                        and LEFT(a.code,3) NOT IN (200,300,688,900) 
-                        and left(a.name, 1) not in ('*', 'S') 
-                        and right(a.name, 1)<>'退' 
-                        and a.code not in (select code from hsab where up>=9 and date='$pre_date')
-                        group by a.code
-                    ) as a
-                where cjs >= avg_cjs and avg_up>=0 and max_up<=9 order by pre desc;";
+        $dates = datesHttp(30);
+        $start_date = reset($dates);
 
+        $sql = "SELECT `code`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
         $list = $connection->createCommand($sql)->queryAll();
+
+        $sort_code = implode(',', array_column($list, 'code'));
+        $upstop_start_date = $dates[23];
+        $upstop_end_date = $dates[29];
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`>='$upstop_start_date' AND `date`<='$upstop_end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
+        $list = $connection->createCommand($sql)->queryAll();
+
+        $count = count($list);
+        $step = 5;
+
+        $index = $redis->get('index');
+        (!$index || $index >= $count - $step) && $redis->setex('index', 3600, 0) && $index = 0;
+        $index_end = $index + $step;
+
+        $urls = [];
+        foreach ($list as $key => $value) {
+            if ($key >= $index && $key < $index_end) {
+                $type = 1 == $value['type'] ? 'sh' : 'sz';
+                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+                $urls[] = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
+            }
+        }
+        
+        $redis->setex('index', 3600, $index_end);
         
         $data = [
-            'list' => $list
+            'list' => $urls
         ];
+
         return $this->render('index', $data);
-    }
-
-    public function actionIndexNew(HttpRequestInterface $request, HttpResponseInterface $response)
-    {
-        $connection=app()->db;
-
-        $a = GoBeyond::abc();
-
-        $fscj_table = 'fscj_' . date('Ymd');
-
-        $sql = "select code from hsab where date=curdate() and up>=9.9";
-        $code_list = $connection->createCommand($sql)->queryAll();
-
-        var_dump($code_list);
-
-        // return $this->render('index', $data);
     }
 
 }
