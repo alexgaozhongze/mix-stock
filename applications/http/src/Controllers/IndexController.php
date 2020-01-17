@@ -52,9 +52,11 @@ class IndexController
         $urls = [];
         foreach ($list as $key => $value) {
             if ($key >= $index && $key < $index_end) {
+                $market = $value['type'] + 1;
                 $type = 1 == $value['type'] ? 'sh' : 'sz';
                 $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
-                $urls[] = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
+                // $urls[] = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
+                $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
             }
         }
         
