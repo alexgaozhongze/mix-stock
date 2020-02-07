@@ -29,38 +29,41 @@ class IndexController
         $connection=app()->db;
         $redis = app()->redis;
 
-        $dates = datesHttp(30);
-        $start_date = reset($dates);
+        $redis_urls = $redis->get('urls');
+        $unserialize_urls = unserialize($redis_urls);
 
-        $sql = "SELECT `code`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
-        $list = $connection->createCommand($sql)->queryAll();
+        if (!$unserialize_urls) {
+            $dates = datesHttp(30);
+            $start_date = reset($dates);
 
-        $sort_code = implode(',', array_column($list, 'code'));
-        $upstop_start_date = $dates[23];
-        $upstop_end_date = $dates[29];
+            $sql = "SELECT `code`,`type`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
+            $list = $connection->createCommand($sql)->queryAll();
 
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`>='$upstop_start_date' AND `date`<='$upstop_end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
-        $list = $connection->createCommand($sql)->queryAll();
-
-        $count = count($list);
-        $step = 5;
-
-        $index = $redis->get('index');
-        (!$index || $index >= $count - $step) && $redis->setex('index', 3600, 0) && $index = 0;
-        $index_end = $index + $step;
-
-        $urls = [];
-        foreach ($list as $key => $value) {
-            if ($key >= $index && $key < $index_end) {
-                $type = 1 == $value['type'] ? 'sh' : 'sz';
-                $market = 1 == $value['type'] ? 1 : 2;
-                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
-                $urls[] = "http://quote.eastmoney.com/concept/$type$code.html#fschart-m5k";
-                // $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+            $yestdate = $dates[29];
+            $urls = [];
+            foreach ($list as $value) {
+                $sql = "SELECT `ema5`,`ema10`,`ema20` FROM `macd` WHERE `code`=$value[code] AND `time`>='$yestdate'";
+                $macd_list = $connection->createCommand($sql)->queryAll();
+            
+                $macd_count = count($macd_list);
+                $uper_count = 0;
+                foreach ($macd_list as $macd_value) {
+                    if ($macd_value['ema5'] >= $macd_value['ema20'] && $macd_value['ema10'] >= $macd_value['ema20']) {
+                        $uper_count ++;
+                        if ($uper_count / $macd_count >= 0.8) {
+                            $market = 1 == $value['type'] ? 1 : 2;
+                            $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+                            $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+                            break;
+                        }
+                    }
+                }
             }
+            $unserialize_urls = $urls;
         }
-        
-        $redis->setex('index', 3600, $index_end);
+
+        $urls = array_splice($unserialize_urls, 0, 5);
+        $redis->setex('urls', 888, serialize($unserialize_urls));
         
         $data = [
             'list' => $urls
