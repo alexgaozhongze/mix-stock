@@ -39,7 +39,7 @@ class IndexController
         $upstop_start_date = $dates[23];
         $upstop_end_date = $dates[29];
         
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`>='$upstop_start_date' AND `date`<='$upstop_end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE LEFT(`code`,3) NOT IN (300,688) AND `date`>='$upstop_start_date' AND `date`<='$upstop_end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
         $list = $connection->createCommand($sql)->queryAll();
 
         $count = count($list);
