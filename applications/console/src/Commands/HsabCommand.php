@@ -131,10 +131,4 @@ class HsabCommand
         app()->dbPool->getConnection()->release();
     }
 
-    private function goSync()
-    {
-        if (strtotime('09:30') <= time() && strtotime('11:35') >= time()) return true;
-        else if (strtotime('13:00') <= time() && strtotime('15:15') >= time()) return true;
-    }
-
 }
