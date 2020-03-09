@@ -94,7 +94,7 @@ class HsabCommand
                 $datas = $data['data']['diff'] ?? false;
                 if (!$datas) return false;
 
-                $sql_fields = "INSERT INTO `hsab` (`code`, `price`, `up`, `upp`, `cjs`, `cje`, `zf`, `zg`, `zd`, `jk`, `zs`, `lb`, `hsl`, `syl`, `sjl`, `date`, `name`, `type`) VALUES ";
+                $sql_fields = "INSERT INTO `hsab` (`code`, `price`, `up`, `upp`, `zt`, `dt`, `cjs`, `cje`, `zf`, `zg`, `zd`, `jk`, `zs`, `lb`, `hsl`, `syl`, `sjl`, `date`, `name`, `type`) VALUES ";
                 $sql_values = "";
 
                 foreach ($datas as $value) {
@@ -104,10 +104,22 @@ class HsabCommand
 
                     $sql_values && $sql_values .= ',';
                     $type = $value['f13'] ?: 2;
-                    $sql_values .= "($value[f12], $value[f2], $value[f3], $value[f4], $value[f5], $value[f6], $value[f7], $value[f15], $value[f16], $value[f17], $value[f18], $value[f10], $value[f8], $value[f9], $value[f23], '$date', '$value[f14]', $type)";
+                    if ('NULL' == $value['f18']) {
+                        $zt = $dt = 'NULL';
+                    } else {
+                        if (false !== strpos($value['f14'], 'ST')) {
+                            $rate = 0.05;
+                        } else {
+                            $rate = 0.1;
+                        }
+                        $zt = round($value['f18'] * (1 + $rate), 2);
+                        $dt = round($value['f18'] * (1 - $rate), 2);
+                    }
+
+                    $sql_values .= "($value[f12], $value[f2], $value[f3], $value[f4], $zt, $dt, $value[f5], $value[f6], $value[f7], $value[f15], $value[f16], $value[f17], $value[f18], $value[f10], $value[f8], $value[f9], $value[f23], '$date', '$value[f14]', $type)";
                 }
         
-                $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `up`=VALUES(`up`), `upp`=VALUES(`upp`), `cjs`=VALUES(`cjs`), `cje`=VALUES(`cje`), `zf`=VALUES(`zf`), `zg`=VALUES(`zg`), `zd`=VALUES(`zd`), `jk`=VALUES(`jk`), `zs`=VALUES(`zs`), `lb`=VALUES(`lb`), `hsl`=VALUES(`hsl`), `syl`=VALUES(`syl`), `sjl`=VALUES(`sjl`);";
+                $sql_duplicate = " ON DUPLICATE KEY UPDATE `price`=VALUES(`price`), `up`=VALUES(`up`), `upp`=VALUES(`upp`), `cjs`=VALUES(`cjs`), `cje`=VALUES(`cje`), `zf`=VALUES(`zf`), `zg`=VALUES(`zg`), `zd`=VALUES(`zd`), `lb`=VALUES(`lb`), `hsl`=VALUES(`hsl`), `syl`=VALUES(`syl`), `sjl`=VALUES(`sjl`);";
         
                 $sql = $sql_fields . $sql_values . $sql_duplicate;
                 $connection->createCommand($sql)->execute();
