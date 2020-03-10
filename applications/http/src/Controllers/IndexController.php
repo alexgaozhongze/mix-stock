@@ -38,22 +38,24 @@ class IndexController
         $sort_code = implode(',', array_column($list, 'code'));
         $end_date = end($dates);
         
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE LEFT(`code`,3) NOT IN (300,688) AND `date`>='$start_date' AND `date`<='$end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE LEFT(`code`,3) NOT IN (300,688) AND `date`>='$start_date' AND `date`<'$end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
         $list = $connection->createCommand($sql)->queryAll();
 
         $count = count($list);
-        $step = 5;
+        $step = 8;
 
         $index = $redis->get('index');
         (!$index || $index >= $count - $step) && $redis->setex('index', 888, 0) && $index = 0;
         $index_end = $index + $step;
 
+        echo $count, PHP_EOL;
         $urls = [];
         foreach ($list as $key => $value) {
             if ($key >= $index && $key < $index_end) {
                 $market = 1 == $value['type'] ? 1 : 2;
                 $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
                 $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+                echo $key, PHP_EOL;
             }
         }
         
