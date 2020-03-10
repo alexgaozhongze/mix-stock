@@ -29,17 +29,16 @@ class IndexController
         $connection=app()->db;
         $redis = app()->redis;
 
-        $dates = datesHttp(30);
+        $dates = datesHttp(8);
         $start_date = reset($dates);
 
         $sql = "SELECT `code`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
         $list = $connection->createCommand($sql)->queryAll();
 
         $sort_code = implode(',', array_column($list, 'code'));
-        $upstop_start_date = $dates[23];
-        $upstop_end_date = $dates[29];
+        $end_date = end($dates);
         
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE LEFT(`code`,3) NOT IN (300,688) AND `date`>='$upstop_start_date' AND `date`<='$upstop_end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE LEFT(`code`,3) NOT IN (300,688) AND `date`>='$start_date' AND `date`<='$end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
         $list = $connection->createCommand($sql)->queryAll();
 
         $count = count($list);
@@ -59,6 +58,27 @@ class IndexController
         }
         
         $redis->setex('index', 888, $index_end);
+        
+        $data = [
+            'list' => $urls
+        ];
+
+        return $this->render('index', $data);
+    }
+
+    public function actionToday(HttpRequestInterface $request, HttpResponseInterface $response)
+    {
+        $connection=app()->db;
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='2020-03-10' AND `up`>=9.9";
+        $list = $connection->createCommand($sql)->queryAll();
+
+        $urls = [];
+        foreach ($list as $key => $value) {
+            $market = 1 == $value['type'] ? 1 : 2;
+            $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+            $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+        }
         
         $data = [
             'list' => $urls
