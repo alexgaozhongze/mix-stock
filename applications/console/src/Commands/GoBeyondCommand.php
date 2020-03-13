@@ -29,7 +29,8 @@ class GoBeyondCommand
             // $this->two();
             // $this->three();
             // $this->four();
-            $this->five();
+            // $this->five();
+            $this->six();
         });
 
         Event::wait();
@@ -209,6 +210,57 @@ class GoBeyondCommand
         }
 
         $redis->setex('index', 3600, $index_end);
+    }
+
+    private function six()
+    {
+        exec("google-chrome");
+        
+        $connection=app()->dbPool->getConnection();
+        $dates = dates(8);
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
+
+        $code_list = $connection->createCommand($sql)->queryAll();
+
+        foreach ($code_list as $value) {
+            $i = 0;
+            foreach ($dates as $date) {
+                $sql = "SELECT MIN(`zd`) AS `kp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
+                $info = $connection->createCommand($sql)->queryOne();
+                $kp = $info['kp'];
+
+                $sql = "SELECT `sp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 15:00:00'";
+                $info = $connection->createCommand($sql)->queryOne();
+                $sp = $info['sp'];
+                
+                if ($sp > $kp) {
+                    $i ++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($i == count($dates)) {
+                $market = 1 == $value['type'] ? 1 : 2;
+                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+                $url = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+                exec("google-chrome '$url'");
+            }
+        }
+    }
+
+    private function arraySort($array,$keys,$sort='asc') {
+        $newArr = $valArr = array();
+        foreach ($array as $key=>$value) {
+            $valArr[$key] = $value[$keys];
+        }
+        ($sort == 'asc') ?  asort($valArr) : arsort($valArr);
+        reset($valArr);
+        foreach($valArr as $key=>$value) {
+            $newArr[$key] = $array[$key];
+        }
+        return $newArr;
     }
 
 }

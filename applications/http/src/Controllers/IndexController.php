@@ -72,7 +72,7 @@ class IndexController
     {
         $connection=app()->db;
 
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`='2020-03-10' AND `up`>=9.9";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `up`>=9.9 limit 0,10";
         $list = $connection->createCommand($sql)->queryAll();
 
         $urls = [];
@@ -82,6 +82,47 @@ class IndexController
             $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
         }
         
+        $data = [
+            'list' => $urls
+        ];
+
+        return $this->render('index', $data);
+    }
+
+    public function actionGo(HttpRequestInterface $request, HttpResponseInterface $response)
+    {
+        $connection=app()->db;
+        $dates = datesHttp(8);
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
+        $code_list = $connection->createCommand($sql)->queryAll();
+
+        $urls = [];
+        foreach ($code_list as $value) {
+            $i = 0;
+            foreach ($dates as $date) {
+                $sql = "SELECT MIN(`zd`) AS `kp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
+                $info = $connection->createCommand($sql)->queryOne();
+                $kp = $info['kp'];
+
+                $sql = "SELECT `sp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 15:00:00'";
+                $info = $connection->createCommand($sql)->queryOne();
+                $sp = $info['sp'];
+                
+                if ($sp > $kp) {
+                    $i ++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($i == count($dates)) {
+                $market = 1 == $value['type'] ? 1 : 2;
+                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+                $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+            }
+        }
+
         $data = [
             'list' => $urls
         ];
