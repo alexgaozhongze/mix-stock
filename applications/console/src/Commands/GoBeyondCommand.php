@@ -214,40 +214,75 @@ class GoBeyondCommand
 
     private function six()
     {
-        exec("google-chrome");
-        
         $connection=app()->dbPool->getConnection();
+        $redis = app()->redisPool->getConnection();
+
         $dates = dates(8);
+        $index = $redis->get('index');
+        !$index && $index = 0;
+        $step = 8;
 
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
+        $sql = "SELECT * FROM `date_code` WHERE `date`=CURDATE()";
+        $date_code = $connection->createCommand($sql)->queryOne();
 
-        $code_list = $connection->createCommand($sql)->queryAll();
+        if (!$date_code) {
+            $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
 
-        foreach ($code_list as $value) {
-            $i = 0;
-            foreach ($dates as $date) {
-                $sql = "SELECT MIN(`zd`) AS `kp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
-                $info = $connection->createCommand($sql)->queryOne();
-                $kp = $info['kp'];
-
-                $sql = "SELECT `sp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 15:00:00'";
-                $info = $connection->createCommand($sql)->queryOne();
-                $sp = $info['sp'];
-                
-                if ($sp > $kp) {
-                    $i ++;
-                } else {
-                    break;
+            $code_list = $connection->createCommand($sql)->queryAll();
+            if (!$code_list) {
+                $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退' LIMIT 0,$step";
+    
+                $code_list = $connection->createCommand($sql)->queryAll();
+            }
+    
+            $codes = '';
+            foreach ($code_list as $value) {
+                $i = 0;
+                foreach ($dates as $date) {
+                    $sql = "SELECT MIN(`zd`) AS `kp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
+                    $info = $connection->createCommand($sql)->queryOne();
+                    $kp = $info['kp'];
+    
+                    $sql = "SELECT `sp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 15:00:00'";
+                    $info = $connection->createCommand($sql)->queryOne();
+                    $sp = $info['sp'];
+                    
+                    if ($sp > $kp) {
+                        $i ++;
+                    } else {
+                        break;
+                    }
+                }
+    
+                if ($i == count($dates)) {
+                    $codes .= $value['code'] . ',';
                 }
             }
 
-            if ($i == count($dates)) {
-                $market = 1 == $value['type'] ? 1 : 2;
-                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
-                $url = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
-                exec("google-chrome '$url'");
-            }
+            $codes = rtrim($codes, ',');
+            $sql = "INSERT INTO `date_code` VALUES (CURDATE(), '$codes')";
+            $connection->createCommand($sql)->execute();
+
+            $date_code = [
+                'code' => $codes
+            ];
         }
+
+        $codes = $date_code['code'];
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `code` IN ($codes) AND `date`=CURDATE() ORDER BY `up` LIMIT $index,$step";
+        $list = $connection->createCommand($sql)->queryAll();
+
+        foreach ($list as $value) {
+            $market = 1 == $value['type'] ? 1 : 2;
+            $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+            $url = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+            exec("google-chrome '$url'");
+        }
+
+        $index += $step;
+        $index > $step && $index = 0;
+        $redis->setex('index', 88888, $index);
     }
 
     private function arraySort($array,$keys,$sort='asc') {
