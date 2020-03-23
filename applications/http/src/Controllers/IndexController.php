@@ -30,36 +30,80 @@ class IndexController
         $redis = app()->redis;
 
         $dates = datesHttp(8);
-        $start_date = reset($dates);
-
-        $sql = "SELECT `code`,SUM(`up`) AS `sup` FROM `hsab` WHERE `date`>='$start_date' GROUP BY `code` ORDER BY `sup` DESC";
-        $list = $connection->createCommand($sql)->queryAll();
-
-        $sort_code = implode(',', array_column($list, 'code'));
-        $end_date = end($dates);
-        
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE LEFT(`code`,3) NOT IN (300,688) AND `date`>='$start_date' AND `date`<'$end_date' AND `up`>=9.9 GROUP BY `code` ORDER BY FIELD(`code`, $sort_code)";
-        $list = $connection->createCommand($sql)->queryAll();
-
-        $count = count($list);
+        $index = $redis->get('index');
+        !$index && $index = 0;
         $step = 8;
 
-        $index = $redis->get('index');
-        (!$index || $index >= $count - $step) && $redis->setex('index', 888, 0) && $index = 0;
-        $index_end = $index + $step;
+        $sql = "SELECT * FROM `date_code` WHERE `date`=CURDATE()";
+        $date_code = $connection->createCommand($sql)->queryOne();
 
-        echo $count, PHP_EOL;
-        $urls = [];
-        foreach ($list as $key => $value) {
-            if ($key >= $index && $key < $index_end) {
-                $market = 1 == $value['type'] ? 1 : 2;
-                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
-                $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
-                echo $key, PHP_EOL;
+        if (!$date_code) {
+            $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
+
+            $code_list = $connection->createCommand($sql)->queryAll();
+            if (!$code_list) {
+                $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退' LIMIT 0,$step";
+    
+                $code_list = $connection->createCommand($sql)->queryAll();
             }
+    
+            $codes = '';
+            foreach ($code_list as $value) {
+                $i = 0;
+                foreach ($dates as $date) {
+                    $sql = "SELECT MIN(`zd`) AS `kp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
+                    $info = $connection->createCommand($sql)->queryOne();
+                    $kp = $info['kp'];
+    
+                    $sql = "SELECT `sp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 15:00:00'";
+                    $info = $connection->createCommand($sql)->queryOne();
+                    $sp = $info['sp'];
+                    
+                    if ($sp > $kp) {
+                        $i ++;
+                    } else {
+                        break;
+                    }
+                }
+    
+                if ($i == count($dates)) {
+                    $codes .= $value['code'] . ',';
+                }
+            }
+            $codes = rtrim($codes, ',');
+
+            $min_date = $dates[5];
+            $sql = "SELECT `code` FROM `hsab` WHERE `code` IN ($codes) AND `date`>='$min_date' AND `zg`=`zt` GROUP BY `code`";
+
+            $codes_upstop = $connection->createCommand($sql)->queryAll();
+            foreach ($codes_upstop as $value) {
+                $codes = str_replace([$value['code'] . ',', $value['code']], '', $codes);
+            }
+            $codes = rtrim($codes, ',');
+
+            $sql = "INSERT INTO `date_code` VALUES (CURDATE(), '$codes')";
+            $connection->createCommand($sql)->execute();
+
+            $date_code = [
+                'code' => $codes
+            ];
+        }
+
+        $codes = $date_code['code'];
+
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `code` IN ($codes) AND `date`=CURDATE() ORDER BY `up` LIMIT $index,$step";
+        $list = $connection->createCommand($sql)->queryAll();
+
+        $urls = [];
+        foreach ($list as $value) {
+            $market = 1 == $value['type'] ? 1 : 2;
+            $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+            $urls[] = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
         }
         
-        $redis->setex('index', 888, $index_end);
+        $index += $step;
+        $index > $step && $index = 0;
+        $redis->setex('index', 88888, $index);
         
         $data = [
             'list' => $urls
