@@ -215,12 +215,8 @@ class GoBeyondCommand
     private function six()
     {
         $connection=app()->dbPool->getConnection();
-        $redis = app()->redisPool->getConnection();
 
         $dates = dates(8);
-        $index = $redis->get('index');
-        !$index && $index = 0;
-        $step = 8;
 
         $sql = "SELECT * FROM `date_code` WHERE `date`=CURDATE()";
         $date_code = $connection->createCommand($sql)->queryOne();
@@ -229,19 +225,14 @@ class GoBeyondCommand
             $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退'";
 
             $code_list = $connection->createCommand($sql)->queryAll();
-            if (!$code_list) {
-                $sql = "SELECT `code`,`type` FROM `hsab` WHERE `date`=CURDATE() AND `price` IS NOT NULL AND LEFT(`code`,3) NOT IN (200,300,688,900) AND LEFT(`name`, 1) NOT IN ('*', 'S') AND RIGHT(`name`, 1)<>'退' LIMIT 0,$step";
-    
-                $code_list = $connection->createCommand($sql)->queryAll();
-            }
     
             $codes = '';
             foreach ($code_list as $value) {
                 $i = 0;
                 foreach ($dates as $date) {
-                    $sql = "SELECT MIN(`zd`) AS `kp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
+                    $sql = "SELECT `zd` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 09:35:00'";
                     $info = $connection->createCommand($sql)->queryOne();
-                    $kp = $info['kp'];
+                    $kp = $info['zd'];
     
                     $sql = "SELECT `sp` FROM `macd` WHERE `code`=$value[code] AND `time`='$date 15:00:00'";
                     $info = $connection->createCommand($sql)->queryOne();
@@ -279,7 +270,7 @@ class GoBeyondCommand
 
         $codes = $date_code['code'];
 
-        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `code` IN ($codes) AND `date`=CURDATE() ORDER BY `up` LIMIT $index,$step";
+        $sql = "SELECT `code`,`type` FROM `hsab` WHERE `code` IN ($codes) AND `date`=CURDATE() ORDER BY `up` LIMIT 0,8";
         $list = $connection->createCommand($sql)->queryAll();
 
         foreach ($list as $value) {
@@ -288,10 +279,6 @@ class GoBeyondCommand
             $url = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
             exec("google-chrome '$url'");
         }
-
-        $index += $step;
-        $index > $step && $index = 0;
-        $redis->setex('index', 88888, $index);
     }
 
     private function arraySort($array,$keys,$sort='asc') {
