@@ -26,10 +26,8 @@ class GoBeyondCommand
     {
         xgo(function () {
             $connection=app()->dbPool->getConnection();
-            $dates = dates(1);
-            $pre_date = reset($dates);
 
-            $sql = "SELECT * FROM `date_code` WHERE `date`='$pre_date'";
+            $sql = "SELECT * FROM `date_code` ORDER BY `date` DESC LIMIT 1";
             $date_code = $connection->createCommand($sql)->queryOne();
 
             $codes = $date_code['code'];
