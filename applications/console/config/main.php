@@ -26,6 +26,7 @@ return [
         'fscj' => ['Fscj'],
         'macd' => ['Macd'],
         'macdSync' => ['MacdSync', 'options' => [['code']]],
+        'dc' => ['DateCode'],
         'test' => ['Test'],
 
         'g' => [
