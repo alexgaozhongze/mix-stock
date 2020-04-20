@@ -57,14 +57,14 @@ class DateCodeCommand
             }
             $codes = rtrim($codes, ',');
 
-            $min_date = $dates[5];
-            $sql = "SELECT `code` FROM `hsab` WHERE `code` IN ($codes) AND `date`>='$min_date' AND `zg`=`zt` GROUP BY `code`";
+            // $min_date = $dates[5];
+            // $sql = "SELECT `code` FROM `hsab` WHERE `code` IN ($codes) AND `date`>='$min_date' AND `zg`=`zt` GROUP BY `code`";
 
-            $codes_upstop = $connection->createCommand($sql)->queryAll();
-            foreach ($codes_upstop as $value) {
-                $codes = str_replace([$value['code'] . ',', $value['code']], '', $codes);
-            }
-            $codes = rtrim($codes, ',');
+            // $codes_upstop = $connection->createCommand($sql)->queryAll();
+            // foreach ($codes_upstop as $value) {
+            //     $codes = str_replace([$value['code'] . ',', $value['code']], '', $codes);
+            // }
+            // $codes = rtrim($codes, ',');
 
             $sql = "INSERT INTO `date_code` VALUES (CURDATE(), '$codes')";
             $connection->createCommand($sql)->execute();
