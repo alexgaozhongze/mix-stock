@@ -26,21 +26,30 @@ class GoBeyondCommand
     {
         xgo(function () {
             $connection=app()->dbPool->getConnection();
+            $redis=app()->redisPool->getConnection();
 
-            $sql = "SELECT * FROM `date_code` ORDER BY `date` DESC LIMIT 1";
-            $date_code = $connection->createCommand($sql)->queryOne();
+            $dates = dates(8);
 
-            $codes = $date_code['code'];
-
-            $sql = "SELECT `code`,`type` FROM `hsab` WHERE `code` IN ($codes) AND `date`=CURDATE() ORDER BY `up` LIMIT 0,8";
+            $sql = "select date_code.date,hsab.* from date_code left join hsab on FIND_IN_SET(hsab.code,date_code.code) and date_code.date<=hsab.date where date_code.date>='$dates[0]' and hsab.up>=9.9 group by concat(hsab.date,hsab.code) order by hsab.date";
             $list = $connection->createCommand($sql)->queryAll();
-    
-            foreach ($list as $value) {
-                $market = 1 == $value['type'] ? 1 : 2;
-                $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
-                $url = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
-                exec("google-chrome '$url'");
+
+            $index = $redis->get('index');
+            $index >= count($list) && $redis->setex('index', 88888, 0) && $index = 0;
+            $index_end = $index + 8;
+
+            foreach ($list as $key => $value) {
+                if ($key <= $index_end && $key >= $index) {
+                    $market = 1 == $value['type'] ? 1 : 2;
+                    $code = str_pad($value['code'], 6, '0', STR_PAD_LEFT);
+                    $url = "http://quote.eastmoney.com/basic/h5chart-iframe.html?code=$code&market=$market&type=m5k";
+                    exec("google-chrome '$url'");
+                } else {
+                    continue;
+                }
             }
+
+            $index = $index_end + 1;
+            $redis->setex('index', 88888, $index);
         });
     }
 

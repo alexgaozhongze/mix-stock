@@ -18,37 +18,18 @@ class TestCommand
      */
     public function main()
     {
-        $phones = range(1, 10000);
+        xgo(function () {
+            $connection=app()->dbPool->getConnection();
 
-        $urls = [];
-        foreach ($phones as $value) {
-        //    $urls[] = 'http://47.103.61.179:1033/index/check-zlqb?userPhone=' . md5($value);
-            $mobile = rand(10000000000, 99999999999);
-            $urls[] = 'http://139.196.232.14:8013/user/get-access-token?mobile=$mobile&status=1';
-            $urls[] = 'http://139.196.232.14:8013/user/auto-login';
-            $urls[] = 'http://139.196.232.14:8013/user/auto-login';
-            $urls[] = 'http://139.196.232.14:8013/user/auto-login';
+            $sql = "SELECT `code` FROM `date_code` WHERE `date`<>CURDATE() ORDER BY `date` DESC LIMIT 5";
+            $list = $connection->createCommand($sql)->queryAll();
 
-            // $urls[] = 'https://www.xiucai.com/class/detail/1028/';
-        }
+            $code_in = implode(',', array_column($list, 'code'));
+            $sql = "SELECT `code`,`date` FROM `hsab` WHERE `code` IN ($code_in) AND `date`>='2020-04-13' AND `up`>=9.9";
+            $list = $connection->createCommand($sql)->queryAll();
 
-        $count = 0;
-
-        QueryList::multiGet($urls)
-        ->concurrency(200)
-        ->withOptions([
-            'timeout' => 3
-        ])
-        ->success(function(QueryList $ql, Response $response, $index) use (&$count) {
-            $data = $ql->getHtml();
-
-            $count ++;
-
-            // echo $count,PHP_EOL;
-            echo $count . ' ' . date('Y-m-d H:i:s') . ' ' . $data,PHP_EOL;
-        })->error(function (QueryList $ql, $reason, $index){
-            // ...
-        })->send();
+            var_export($list);
+        });
     }
 
 }
