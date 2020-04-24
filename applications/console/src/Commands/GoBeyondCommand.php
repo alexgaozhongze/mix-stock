@@ -30,7 +30,7 @@ class GoBeyondCommand
 
             $dates = dates(8);
 
-            $sql = "select date_code.date,hsab.* from date_code left join hsab on FIND_IN_SET(hsab.code,date_code.code) and date_code.date<=hsab.date where date_code.date>='$dates[0]' and hsab.up>=9.9 group by concat(hsab.date,hsab.code) order by hsab.date";
+            $sql = "select date_code.date,hsab.* from date_code left join hsab on FIND_IN_SET(hsab.code,date_code.code) and date_code.date<=hsab.date where date_code.date>='$dates[0]' and hsab.up>=9.9 group by hsab.code order by hsab.date";
             $list = $connection->createCommand($sql)->queryAll();
 
             $index = $redis->get('index');
