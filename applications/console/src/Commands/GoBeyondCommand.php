@@ -35,7 +35,7 @@ class GoBeyondCommand
 
             $index = $redis->get('index');
             $index >= count($list) && $redis->setex('index', 88888, 0) && $index = 0;
-            $index_end = $index + 8;
+            $index_end = $index + 6;
 
             foreach ($list as $key => $value) {
                 if ($key <= $index_end && $key >= $index) {
