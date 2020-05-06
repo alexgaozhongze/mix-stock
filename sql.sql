@@ -1,27 +1,17 @@
--- avg_up
-select * from (
-	select
-		round(avg(a.up), 2) avg_up,
-		a.code,
-		b.type
-	from
-		hsab a
-	left join hsab b on
-		a.code = b.code
-		and a.type = b.type
-		and b.date = curdate()
-	where
-		a.date <> curdate()
-		and b.price is not null
-		and LEFT(a.code,3) NOT IN (200,300,688,900) 
-		and left(b.name, 1) not in ('*', 'S') 
-		and right(b.name, 1)<>'退'
-	group by
-		a.code
-	order by
-		avg_up desc
-) as a
-left join hsab b on
-	a.code = b.code
-	and a.type = b.type
-where avg_up<=8
+-- ztfb
+SELECT `hsab`.* FROM (
+	SELECT
+		`code`, `type`, COUNT(*) AS `count`
+	FROM
+		`hsab`
+	WHERE
+		`date` >= (SELECT MIN(`date`) FROM (SELECT `date` FROM `hsab` WHERE `date` <> CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT 2) AS `t`)
+		AND IF (`date` = (SELECT MIN(`date`) FROM (SELECT `date` FROM `hsab` WHERE `date` <> CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT 2) AS `t`),
+			`price` = `zt`, `price` = `zt` AND `zf` = 0 AND `date` = (SELECT MIN(`date`) FROM (SELECT `date` FROM `hsab` WHERE `date` <> CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT 1) AS `t`))
+		GROUP BY `code`
+) AS `t`
+LEFT JOIN `hsab` ON `t`.`code`=`hsab`.`code` AND `t`.`type`=`hsab`.`type`
+WHERE count = 2
+	AND `date` >= (SELECT MIN(`date`) FROM (SELECT `date` FROM `hsab` WHERE `date` <> CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT 8) AS `t`)
+	AND IF (`hsab`.`code` IN (SELECT `code` FROM `hsab` WHERE `date` >= (SELECT MIN(`date`) FROM (SELECT `date` FROM `hsab` WHERE `date` <> CURDATE() GROUP BY `date` ORDER BY `date` DESC LIMIT 8) AS `t`) AND LEFT (`name`, 1) IN ('N','*')),
+		false, true)
