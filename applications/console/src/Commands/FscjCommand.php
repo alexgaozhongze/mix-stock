@@ -29,7 +29,6 @@ class FscjCommand
                 `up` float(5,2) DEFAULT NULL,
                 `num` int(11) DEFAULT NULL,
                 `bs` tinyint(4) NOT NULL,
-                `ud` tinyint(4) NOT NULL,
                 `time` time NOT NULL,
                 `type` tinyint(4) NOT NULL,
                 PRIMARY KEY (`code`,`type`,`time`)
@@ -53,15 +52,17 @@ class FscjCommand
         list($microstamp, $timestamp) = explode(' ', microtime());
         $timestamp = "$timestamp" . intval($microstamp * 1000);
 
-        $urls = $url_keys = [];
-        array_walk($code_times, function($item) use (&$urls, &$url_keys, $timestamp) {
+        $urls = [];
+        array_walk($code_times, function($item) use (&$urls, $timestamp) {
             $page_size = rand(8, 888);
             $page = ceil(($item['count'] + 1) / $page_size);
+            $page_index = $page - 1;
 
-            $key = str_pad($item['code'], 6, "0", STR_PAD_LEFT) . $item['type'];
+            $market = 1 == $item['type'] ? 1 : 0;
+            $code = str_pad($item['code'], 6, "0", STR_PAD_LEFT);
+            $key = $code . $item['type'];
 
-            $urls[] = "http://mdfm.eastmoney.com/EM_UBG_MinuteApi/Js/Get?dtype=all&token=44c9d251add88e27b65ed86506f6e5da&rows=$page_size&page=$page&id=$key&gtvolume=&sort=asc&_=$timestamp&js={%22data%22:(x)}";
-            $url_keys[] = $key;
+            $urls[] = "http://push2ex.eastmoney.com/getStockFenShi?pagesize=$page_size&ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wzfscj&cb=&pageindex=$page_index&id=$key&sort=1&ft=1&code=$code&market=$market&_=$timestamp";
         });
 
         QueryList::multiGet($urls)
@@ -69,25 +70,29 @@ class FscjCommand
             ->withOptions([
                 'timeout' => 3
             ])
-            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $fscj_table, $url_keys) {
+            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $fscj_table) {
                 $data = $ql->getHtml();
 
                 $item = json_decode($data, true);
-                $datas = $item['data']['value']['data'] ?? [];
-                $pc = $item['data']['value']['pc'] ?? 0;
+                $code = $item['data']['c'];
+                $type = 0 == $item['data']['c'] ? 2 : 1;
+                $cp = $item['data']['cp'] ?? 0;
+                $datas = $item['data']['data'] ?? [];
     
-                $sql_fields = "INSERT IGNORE INTO `$fscj_table` (`code`, `price`, `up`, `num`, `bs`, `ud`, `time`, `type`) VALUES ";
+                $sql_fields = "INSERT IGNORE INTO `$fscj_table` (`code`, `price`, `up`, `num`, `bs`, `time`, `type`) VALUES ";
                 $sql_values = "";
     
-                $code = substr($url_keys[$index], 0, 6);
-                $type = substr($url_keys[$index], 6, 1);
-    
-                array_walk($datas, function($iitem) use (&$sql_values, $pc, $code, $type) {
-                    list($time, $price, $num, $bs, $ud) = explode(',', $iitem);
+                array_walk($datas, function($iitem) use (&$sql_values, $cp, $code, $type) {
+                    $time = $iitem['t'];
+                    $price = $iitem['p'] / 1000;
+                    $num = $iitem['v'];
+                    $bs = $iitem['bs'];
+                    $pc = $cp / 1000;
+
                     $sql_values && $sql_values .= ',';
                     $up = bcmul(bcdiv(bcsub($price, $pc, 2), $pc, 4), 100, 2);
     
-                    $sql_values .= "('$code', $price, $up, $num, $bs, $ud, '$time', $type)";
+                    $sql_values .= "('$code', $price, $up, $num, $bs, '$time', $type)";
                 });
     
                 if ($sql_values) {
