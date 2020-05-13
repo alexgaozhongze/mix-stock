@@ -65,17 +65,18 @@ class FscjCommand
             $urls[] = "http://push2ex.eastmoney.com/getStockFenShi?pagesize=$page_size&ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wzfscj&cb=&pageindex=$page_index&id=$key&sort=1&ft=1&code=$code&market=$market&_=$timestamp";
         });
 
+        $code_type = array_column($code_times, 'type', 'code');
         QueryList::multiGet($urls)
             ->concurrency(8)
             ->withOptions([
                 'timeout' => 3
             ])
-            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $fscj_table) {
+            ->success(function(QueryList $ql, Response $response, $index) use ($connection, $fscj_table, $code_type) {
                 $data = $ql->getHtml();
 
                 $item = json_decode($data, true);
                 $code = $item['data']['c'];
-                $type = 0 == $item['data']['c'] ? 2 : 1;
+                $type = $code_type[intval($code)];
                 $cp = $item['data']['cp'] ?? 0;
                 $datas = $item['data']['data'] ?? [];
     
